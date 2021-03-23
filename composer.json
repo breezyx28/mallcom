@@ -40,7 +40,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helper/response.php",
+            "app/helper/authUser.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
