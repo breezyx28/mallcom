@@ -34,9 +34,9 @@ class ProductsRequest extends FormRequest
             'price' => 'required|integer',
             'photo' => 'required|image|mimes:jpg,jpeg,png',
             'description' => 'string',
-            'discount' => 'integer',
+            'discount' => 'integer|max:100|min:0',
             'addetionalPrice' => 'string',
-            'rate' => 'integer',
+            // 'rate' => 'integer|max:100|min:0',
             'category_id' => 'required|integer|exists:categories,id',
             'store_id' => 'required|integer|exists:stores,id'
         ];

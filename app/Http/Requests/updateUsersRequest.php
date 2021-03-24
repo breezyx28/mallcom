@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\dateFormatRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -35,7 +36,7 @@ class updateUsersRequest extends FormRequest
             'phone' => 'unique:users,phone|digits:10',
             'email' => 'string|unique:users|regex:/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/',
             'address' => 'string|max:191',
-            'birthDate' => 'date',
+            'birthDate' => ['date', new dateFormatRule()],
             'state_id' => 'exists:states,id|integer',
             'gender' =>  Rule::in(['ذكر', 'انثى']),
             'activity' =>  'boolean',

@@ -46,10 +46,10 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::group(['prefix' => BASE, 'middleware' => 'userWare'], function () {
 
         // user personal
-        Route::post('profile', [LoginController::class, 'profile']);
+        Route::get('profile', [LoginController::class, 'profile']);
         Route::post('logout', [LoginController::class, 'logout']);
-        Route::post('resetPassword', [LoginController::class, 'resetPassword']);
-        Route::post('updateProfile', [LoginController::class, 'updateProfile']);
+        Route::put('resetPassword', [LoginController::class, 'resetPassword']);
+        Route::put('updateProfile', [LoginController::class, 'updateProfile']);
 
         // user favourit
         Route::apiResource('favourit', FavouritControllerResource::class)->except('update');

@@ -77,7 +77,13 @@ class FavouritControllerResource extends Controller
      */
     public function destroy(Favourit $Favourit)
     {
-        $fav = $Favourit->where(['user_id' => auth()->user()->id, 'id' => $Favourit->id])->delete();
+        try {
+            //code...
+            $Favourit->where(['user_id' => auth()->user()->id, 'id' => $Favourit->id])->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ اثناء المسح', $th->getMessage());
+        }
 
         return Resp::Success('تم الحذف بنجاح', $Favourit);
     }
