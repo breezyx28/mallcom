@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderControllerResource;
 use App\Http\Controllers\ProductControllerResource;
 use App\Http\Controllers\ProductsPhotoControllerResource;
+use App\Http\Controllers\RateControllerResource;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleControllerResource;
 use App\Http\Controllers\StateControllerResource;
@@ -63,6 +64,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // user invoices
         Route::get('myInvoices', [InvoicesController::class, 'myInvoices']);
+
+        // rate product
+        Route::apiResource('rate', RateControllerResource::class)->only('index', 'show');
     });
 
     Route::group(['prefix' => BASE, 'middleware' => 'storeWare'], function () {
