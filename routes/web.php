@@ -15,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return response()->json([
-        'data' => 'Welcome Home'
+        'data' => 'Welcome To MallCom API'
     ]);
 });
