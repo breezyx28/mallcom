@@ -37,4 +37,5 @@ return array(
     'ed962a97bd972bc82007176b647d4e36' => $vendorDir . '/facade/ignition/src/helpers.php',
     '95fa321d64fea213d740b5f14face5f2' => $baseDir . '/app/helper/response.php',
     '59e8d1fa370d8726967e4efcef574629' => $baseDir . '/app/helper/authUser.php',
+    '1ac78a6c0660c7d2545321670be98db2' => $baseDir . '/app/helper/array.php',
 );

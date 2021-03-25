@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Material;
-use App\Http\Requests\MaterialsRequest;
-use App\Http\Requests\UpdateMaterialsRequest;
 use App\Helper\ResponseMessage as Resp;
+use App\Http\Requests\SizesRequest;
+use App\Http\Requests\UpdateSizesRequest;
+use App\Models\Size;
 use Illuminate\Http\Request;
 
-class MaterialControllerResource extends Controller
+class SizesControllerResource extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class MaterialControllerResource extends Controller
      */
     public function index()
     {
-        $all = Material::with('category')->all();
+        $all = Size::with('category')->all();
         return Resp::Success('تم', $all);
     }
 
@@ -27,19 +27,19 @@ class MaterialControllerResource extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MaterialsRequest $request)
+    public function store(SizesRequest $request)
     {
-        $material = new Material();
+        $size = new Size();
 
         $validate = (object) $request->validated();
 
         foreach ($validate as $key => $value) {
-            $material->$key = $value;
+            $size->$key = $value;
         }
 
         try {
-            $material->save();
-            return Resp::Success('تمت الإضافة', $material);
+            $size->save();
+            return Resp::Success('تمت الإضافة', $size);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
         }
@@ -48,32 +48,32 @@ class MaterialControllerResource extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Material  $Material
+     * @param  \App\Models\Size  $size
      * @return \Illuminate\Http\Response
      */
-    public function show(Material $Material)
+    public function show(Size $size)
     {
-        return Resp::Success('تم', $Material);
+        return Resp::Success('تم', $size);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Material  $Material
+     * @param  \App\Models\Size  $size
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMaterialsRequest $request, Material $Material)
+    public function update(UpdateSizesRequest $request, Size $size)
     {
         $validate = (object) $request->validated();
 
         foreach ($validate as $key => $value) {
-            $Material->$key = $value;
+            $size->$key = $value;
         }
 
         try {
-            $Material->save();
-            return Resp::Success('تم التحديث', $Material);
+            $size->save();
+            return Resp::Success('تم التحديث', $size);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
         }
@@ -82,12 +82,12 @@ class MaterialControllerResource extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Material  $Material
+     * @param  \App\Models\Size  $size
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Material $Material)
+    public function destroy(Size $size)
     {
-        $Material->delete();
-        return Resp::Success('تم الحذف', $Material);
+        $size->delete();
+        return Resp::Success('تم الحذف', $size);
     }
 }

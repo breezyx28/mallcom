@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateProductRequest extends FormRequest
+class UpdateAdditionalDescriptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,14 +26,12 @@ class UpdateProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|max:200',
-            'price' => 'integer',
-            'photo' => 'image|mimes:jpg,jpeg,png',
-            'description' => 'string',
-            'discount' => 'integer',
-            'addetionalPrice' => 'string',
-            'rate' => 'integer',
-            'status' => 'boolean',
+            'color' => 'string|max:191',
+            'weight' => 'string|max:191',
+            'for' => 'string|max:191',
+            'company' => 'string|max:191',
+            'expireDate' => 'date',
+            'countryOfMade' => 'string|max:191'
         ];
     }
 

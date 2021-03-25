@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdditionalDescription;
+use App\Models\ProductSizes;
 use Illuminate\Http\Request;
 
-class AddetionalDescriptionsControllerResource extends Controller
+class ProductSizesControllerResource extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class AddetionalDescriptionsControllerResource extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AdditionalDescription  $AdditionalDescription
+     * @param  \App\Models\ProductSizes  $productSizes
      * @return \Illuminate\Http\Response
      */
-    public function show(AdditionalDescription $AdditionalDescription)
+    public function show(ProductSizes $productSizes)
     {
         //
     }
@@ -43,10 +43,10 @@ class AddetionalDescriptionsControllerResource extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AdditionalDescription  $AdditionalDescription
+     * @param  \App\Models\ProductSizes  $productSizes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AdditionalDescription $AdditionalDescription)
+    public function update(Request $request, ProductSizes $productSizes)
     {
         //
     }
@@ -54,10 +54,10 @@ class AddetionalDescriptionsControllerResource extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\AdditionalDescription  $AdditionalDescription
+     * @param  \App\Models\ProductSizes  $productSizes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AdditionalDescription $AdditionalDescription)
+    public function destroy(ProductSizes $productSizes)
     {
         //
     }

@@ -48,6 +48,10 @@ class StoreProductsControllerResource extends Controller
                 $this->storeID = $validate->store_id;
             }
 
+            if (isset($validate->description)) {
+                $validate->description = json_encode($validate->description);
+            }
+
             $product->$key = $value;
         }
 

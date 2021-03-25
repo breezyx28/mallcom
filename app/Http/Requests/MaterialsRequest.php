@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class MaterialsRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class MaterialsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,13 @@ class MaterialsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'materialName' => 'required|string|max:191',
+            'category_id' => 'required|exists:categories,id'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['success' => false, 'errors' => $validator->errors()], 200));
     }
 }

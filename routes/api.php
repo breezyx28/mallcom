@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountsControllerResource;
+use App\Http\Controllers\AdditionalDescriptionControllerResource;
 use App\Http\Controllers\CategoryControllerResource;
 use App\Http\Controllers\FavouritControllerResource;
 use App\Http\Controllers\InvoiceControllerResource;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MaterialControllerResource;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderControllerResource;
 use App\Http\Controllers\ProductControllerResource;
@@ -14,8 +16,11 @@ use App\Http\Controllers\ProductsPhotoControllerResource;
 use App\Http\Controllers\RateControllerResource;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleControllerResource;
+use App\Http\Controllers\SizesControllerResource;
 use App\Http\Controllers\StateControllerResource;
+use App\Http\Controllers\StoreAddDescControllerResource;
 use App\Http\Controllers\StoreControllerResource;
+use App\Http\Controllers\StoreProdPhotControllerResource;
 use App\Http\Controllers\StoreProductsControllerResource;
 use App\Http\Controllers\UserAccountControllerResource;
 use App\Http\Controllers\UserControllerResource;
@@ -42,6 +47,7 @@ const ADMIN = 'v1/admin';
 Route::post(BASE . '/login', [LoginController::class, 'Login']);
 Route::post(BASE . '/register', [RegisterController::class, 'register']);
 
+
 Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::group(['prefix' => BASE, 'middleware' => 'userWare'], function () {
@@ -66,13 +72,19 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::get('myInvoices', [InvoicesController::class, 'myInvoices']);
 
         // rate product
-        Route::apiResource('rate', RateControllerResource::class)->only('index', 'show');
+        Route::apiResource('rate', RateControllerResource::class)->except('store', 'destroy');
     });
 
     Route::group(['prefix' => BASE, 'middleware' => 'storeWare'], function () {
 
         // store product
         Route::ApiResource('product', StoreProductsControllerResource::class);
+
+        // store additional description
+        Route::apiResource('storeAdditionalDescription', StoreAddDescControllerResource::class);
+
+        // store product Photo
+        Route::apiResource('storeProductPhotos', StoreProdPhotControllerResource::class);
     });
 
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
@@ -86,8 +98,11 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         // products
         Route::ApiResource('products', ProductControllerResource::class)->except('store');
 
+        // additional Description
+        Route::ApiResource('additionalDescription', AdditionalDescriptionControllerResource::class);
+
         // products photos
-        // Route::ApiResource('productsPhotos', ProductsPhotoControllerResource::class); ***********
+        Route::ApiResource('productsPhotos', ProductsPhotoControllerResource::class);
 
         // accounts
         Route::resource('accounts', AccountsControllerResource::class)->only('index');
@@ -103,6 +118,12 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // categories
         Route::apiResource('categories', CategoryControllerResource::class);
+
+        // sizes
+        Route::apiResource('sizes', SizesControllerResource::class);
+
+        // materials
+        Route::apiResource('materilas', MaterialControllerResource::class);
 
         // roles
         Route::apiResource('roles', RoleControllerResource::class);

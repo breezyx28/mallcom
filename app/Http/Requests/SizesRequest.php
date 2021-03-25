@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SizesRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class SizesRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,15 @@ class SizesRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'unit' => 'required|string|max:191',
+            'size' => 'required|string|max:191',
+            'measureType' => 'required|string|max:3',
+            'category_id' => 'required|exists:categories,id|integer'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['success' => false, 'errors' => $validator->errors()], 200));
     }
 }
