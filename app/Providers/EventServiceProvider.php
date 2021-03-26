@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\InvoiceEvent;
+use App\Events\NotificationEvent;
 use App\Events\StoreProductEvent;
 use App\Http\Controllers\InvoiceControllerResource;
+use App\Listeners\NotificationListener;
 use App\Listeners\OrdersInvoiceListener;
 use App\Listeners\StoreProductListener;
 use Illuminate\Auth\Events\Registered;
@@ -25,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         InvoiceEvent::class => [
             OrdersInvoiceListener::class,
+        ],
+        NotificationEvent::class => [
+            NotificationListener::class,
         ],
     ];
 

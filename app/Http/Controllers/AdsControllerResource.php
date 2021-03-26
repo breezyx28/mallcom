@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ResponseMessage as Resp;
+use App\Http\Requests\AdsRequest;
+use App\Http\Requests\UpdateAdRequest;
 use App\Models\Ad;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AdsControllerResource extends Controller
 {
@@ -14,7 +18,8 @@ class AdsControllerResource extends Controller
      */
     public function index()
     {
-        //
+        $all = Ad::with('product', 'category')->all();
+        return Resp::Success('تم', $all);
     }
 
     /**
@@ -23,9 +28,23 @@ class AdsControllerResource extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdsRequest $request)
     {
-        //
+        $validate = (object) $request->validated();
+        $ad = new Ad();
+        foreach ($validate as $key => $value) {
+            $ad->$key = $value;
+        }
+
+        $ad->photo = Str::of($request->file('photo')->store('public/Ads'))->substr(7);
+
+        try {
+            $ad->save();
+            return Resp::Success('تم', $ad);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
     }
 
     /**
@@ -36,7 +55,7 @@ class AdsControllerResource extends Controller
      */
     public function show(Ad $ad)
     {
-        //
+        return Resp::Success('تم', $ad);
     }
 
     /**
@@ -46,9 +65,25 @@ class AdsControllerResource extends Controller
      * @param  \App\Models\Ad  $ad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ad $ad)
+    public function update(UpdateAdRequest $request, Ad $ad)
     {
-        //
+        $validate = (object) $request->validated();
+
+        foreach ($validate as $key => $value) {
+            $ad->$key = $value;
+        }
+
+        if (isset($ad->photo)) {
+            $ad->photo = Str::of($request->file('photo')->store('public/Ads'))->substr(7);
+        }
+
+        try {
+            $ad->save();
+            return Resp::Success('تم التحديث بنجاح', $ad);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
     }
 
     /**
@@ -59,6 +94,7 @@ class AdsControllerResource extends Controller
      */
     public function destroy(Ad $ad)
     {
-        //
+        $ad->delete();
+        return Resp::Success('تم الحذف', $ad);
     }
 }

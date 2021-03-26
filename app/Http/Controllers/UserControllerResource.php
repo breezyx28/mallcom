@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationEvent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
@@ -10,7 +11,6 @@ use App\Http\Requests\updateUsersRequest;
 use App\Http\Requests\UsersRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
 
 class UserControllerResource extends Controller
 {
@@ -56,6 +56,10 @@ class UserControllerResource extends Controller
 
         try {
             $user->save();
+
+            event(new NotificationEvent($user->id, 'welcome'));
+            event(new NotificationEvent($user->id, 'verify'));
+
             return Resp::Success('تم إنشاء مستخدم بنجاح', $user);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e);
@@ -90,6 +94,9 @@ class UserControllerResource extends Controller
 
         try {
             $User->save();
+            if ($User->activity == 0) {
+                event(new NotificationEvent($User->user_id, 'block'));
+            }
             return Resp::Success('تم تحديث البيانات بنجاح', $User);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e);
@@ -106,6 +113,9 @@ class UserControllerResource extends Controller
     {
         try {
             $User->delete();
+
+            event(new NotificationEvent($User->id, 'delete'));
+
             return Resp::Success('تم الحذف', $User);
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th);

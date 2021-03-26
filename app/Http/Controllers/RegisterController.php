@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationEvent;
 use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\UsersRequest;
@@ -34,6 +35,10 @@ class RegisterController extends Controller
 
         try {
             $user->save();
+
+            event(new NotificationEvent($user->id, 'welcome'));
+            event(new NotificationEvent($user->id, 'verify'));
+
             return Resp::Success('تم إنشاء مستخدم بنجاح', $user);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e);

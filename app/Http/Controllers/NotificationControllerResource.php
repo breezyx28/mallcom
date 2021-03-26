@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ResponseMessage as Resp;
+use App\Http\Requests\NotificationsRequest;
+use App\Http\Requests\UpdateNotificationRequest;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 
@@ -14,7 +17,9 @@ class NotificationControllerResource extends Controller
      */
     public function index()
     {
-        //
+        $all = Notification::with('user')->all();
+
+        return Resp::Success('تم', $all);
     }
 
     /**
@@ -23,9 +28,21 @@ class NotificationControllerResource extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NotificationsRequest $request)
     {
-        //
+        $validate = (object) $request->validated();
+        $notification = new Notification();
+
+        foreach ($validate as $key => $value) {
+            $notification->$key = $value;
+        }
+
+        try {
+            $notification->save();
+            return Resp::Success('تم', $notification);
+        } catch (\Throwable $th) {
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
     }
 
     /**
@@ -36,7 +53,7 @@ class NotificationControllerResource extends Controller
      */
     public function show(Notification $Notification)
     {
-        //
+        return Resp::Success('تم', $Notification);
     }
 
     /**
@@ -46,9 +63,20 @@ class NotificationControllerResource extends Controller
      * @param  \App\Models\Notification  $Notification
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Notification $Notification)
+    public function update(UpdateNotificationRequest $request, Notification $Notification)
     {
-        //
+        $validate = (object) $request->validated();
+
+        foreach ($validate as $key => $value) {
+            $Notification->$key = $value;
+        }
+
+        try {
+            $Notification->save();
+            return Resp::Success('تم التحديث بنجاح', $Notification);
+        } catch (\Throwable $th) {
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
     }
 
     /**
@@ -59,6 +87,6 @@ class NotificationControllerResource extends Controller
      */
     public function destroy(Notification $Notification)
     {
-        //
+        return Resp::Success('تم الحذف', $Notification);
     }
 }

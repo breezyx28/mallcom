@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountsControllerResource;
 use App\Http\Controllers\AdditionalDescriptionControllerResource;
+use App\Http\Controllers\AdsControllerResource;
 use App\Http\Controllers\CategoryControllerResource;
 use App\Http\Controllers\FavouritControllerResource;
 use App\Http\Controllers\InvoiceControllerResource;
@@ -127,5 +128,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // roles
         Route::apiResource('roles', RoleControllerResource::class);
+
+        // ads
+        Route::apiResource('ads', AdsControllerResource::class);
     });
 });

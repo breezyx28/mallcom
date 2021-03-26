@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Helper\ResponseMessage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class NotificationsRequest extends FormRequest
+class UpdateAdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,10 +15,7 @@ class NotificationsRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->role->position == 'admin') {
-            return true;
-        }
-        return ResponseMessage::Error('غير مصرح', auth()->user()->role->position);
+        return true;
     }
 
     /**
@@ -30,9 +26,14 @@ class NotificationsRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|max:191',
-            'content' => 'required|string|max:191',
-            'user_id' => 'required|integer|exists:user,id',
+            'title' => 'string|max:191',
+            'content' => 'string|max:191',
+            'photo' => 'image|mimes:png,jpg',
+            'product_id' => 'required|exists:products,id',
+            'category_id' => 'required|exists:categories,id',
+            'expireDate' => 'date',
+            'publishDate' => 'date',
+            'status' => 'boolean'
         ];
     }
 

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AdsRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class AdsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,18 @@ class AdsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|string|max:191',
+            'content' => 'required|string|max:191',
+            'photo' => 'required|image|mimes:png,jpg',
+            'product_id' => 'required|exists:products,id',
+            'category_id' => 'required|exists:categories,id',
+            'expireDate' => 'required|date',
+            'publishDate' => 'required|date',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['success' => false, 'errors' => $validator->errors()], 200));
     }
 }

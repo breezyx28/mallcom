@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationEvent;
 use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\ResetPasswordRequest;
@@ -57,6 +58,11 @@ class LoginController extends Controller
         }
         try {
             $user->save();
+
+            if ($user->activity == 0) {
+                event(new NotificationEvent($user->id, 'deactivate'));
+            }
+
             return Resp::Success('تم تحديث البيانات بنجاح', $user);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e);
