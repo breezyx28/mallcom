@@ -19,6 +19,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleControllerResource;
 use App\Http\Controllers\SizesControllerResource;
 use App\Http\Controllers\StateControllerResource;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\StoreAddDescControllerResource;
 use App\Http\Controllers\StoreControllerResource;
 use App\Http\Controllers\StoreProdPhotControllerResource;
@@ -48,6 +49,7 @@ const ADMIN = 'v1/admin';
 Route::post(BASE . '/login', [LoginController::class, 'Login']);
 Route::post(BASE . '/register', [RegisterController::class, 'register']);
 
+Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 
@@ -89,6 +91,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     });
 
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
+
+        // statistics
+        Route::get(BASE . '/statistics', [StatisticsController::class, 'statistics']);
 
         // users
         Route::apiResource('users', UserControllerResource::class);
