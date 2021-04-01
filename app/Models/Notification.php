@@ -13,4 +13,9 @@ class Notification extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getUpdatedAtAttribute()
+    {
+        return $this->diffForHumans();
+    }
 }

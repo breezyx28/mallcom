@@ -13,7 +13,7 @@ class CouponUsersRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,4 +27,14 @@ class CouponUsersRequest extends FormRequest
             //
         ];
     }
+
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     $errors = $validator->errors();
+    //     $messages = [];
+    //     foreach ($errors->all() as $message) {
+    //         $messages[] = $message;
+    //     }
+    //     throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    // }
 }

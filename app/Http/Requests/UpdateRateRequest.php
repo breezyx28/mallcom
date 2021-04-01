@@ -32,6 +32,11 @@ class UpdateRateRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json(['success' => false, 'errors' => $validator->errors()], 200));
+        $errors = $validator->errors();
+        $messages = [];
+        foreach ($errors->all() as $message) {
+            $messages[] = $message;
+        }
+        throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
     }
 }

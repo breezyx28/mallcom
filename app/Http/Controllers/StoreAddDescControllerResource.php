@@ -92,7 +92,6 @@ class StoreAddDescControllerResource extends Controller
 
         try {
             $additionalDescription->save();
-
             return Resp::Success('تم التحديث بنجاح', $additionalDescription);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ', $e->getMessage());
