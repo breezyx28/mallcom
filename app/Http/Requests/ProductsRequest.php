@@ -33,13 +33,13 @@ class ProductsRequest extends FormRequest
             'name' => 'required|string|max:191',
             'price' => 'required|integer',
             'photo' => 'required|image|mimes:jpg,jpeg,png',
-            'description' => 'array',
+            'description' => 'string',
             'note' => 'string',
             'discount' => 'integer|max:100|min:0',
             'addetionalPrice' => 'string',
-            // 'rate' => 'integer|max:100|min:0',
             'category_id' => 'required|integer|exists:categories,id',
-            'store_id' => 'required|integer|exists:stores,id'
+            'store_id' => 'required|integer|exists:stores,id',
+            'offerText' => 'string|max:191'
         ];
     }
 

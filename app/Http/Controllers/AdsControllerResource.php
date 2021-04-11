@@ -18,7 +18,7 @@ class AdsControllerResource extends Controller
      */
     public function index()
     {
-        $all = Ad::with('product', 'category')->all();
+        $all = Ad::with('product', 'category')->get();
         return Resp::Success('تم', $all);
     }
 
@@ -32,6 +32,7 @@ class AdsControllerResource extends Controller
     {
         $validate = (object) $request->validated();
         $ad = new Ad();
+
         foreach ($validate as $key => $value) {
             $ad->$key = $value;
         }

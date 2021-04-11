@@ -29,8 +29,9 @@ class UpdateAdRequest extends FormRequest
             'title' => 'string|max:191',
             'content' => 'string|max:191',
             'photo' => 'image|mimes:png,jpg',
-            'product_id' => 'required|exists:products,id',
-            'category_id' => 'required|exists:categories,id',
+            'product_id' => 'exists:products,id',
+            'category_id' => 'exists:categories,id',
+            'promotionTitle' => 'string|max:191',
             'expireDate' => 'date',
             'publishDate' => 'date',
             'status' => 'boolean'

@@ -32,7 +32,7 @@ class UpdateProductRequest extends FormRequest
             'description' => 'string',
             'discount' => 'integer',
             'addetionalPrice' => 'string',
-            'rate' => 'integer',
+            'offerText' => 'string|max:191',
             'status' => 'boolean',
         ];
     }

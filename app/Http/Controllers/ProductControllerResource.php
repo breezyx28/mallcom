@@ -19,7 +19,7 @@ class ProductControllerResource extends Controller
      */
     public function index()
     {
-        $prod = \App\Models\Product::with('category')->get();
+        $prod = \App\Models\Product::with('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes')->get();
         return Resp::Success('تم بنجاح', $prod);
     }
 
@@ -42,6 +42,7 @@ class ProductControllerResource extends Controller
      */
     public function show(Product $Product)
     {
+        $Product->load('category', 'store', 'product_photos', 'additional_description', 'product_sizes');
         return Resp::Success('تم', $Product);
     }
 

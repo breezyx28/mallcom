@@ -21,6 +21,25 @@ class Product extends Model
         return $this->belongsTo(StoreProduct::class, 'id', 'product_id');
     }
 
+    public function additional_description()
+    {
+        return $this->hasOne(AdditionalDescription::class, 'product_id', 'id');
+    }
+
+    public function rate()
+    {
+        return $this->hasMany(Rate::class, 'product_id', 'id');
+    }
+
+    public function product_photos()
+    {
+        return $this->hasMany(ProductsPhoto::class, 'product_id', 'id');
+    }
+    public function product_sizes()
+    {
+        return $this->hasMany(ProductSizes::class, 'product_id', 'id');
+    }
+
     public function getPhotoAttribute($value)
     {
         // replace http://localhost to by htpp://127.0.0.1
@@ -36,13 +55,13 @@ class Product extends Model
         $discount = 0;
 
         try {
-            $this->attributes['addetionalPrice'];
+            $addPrice = $this->attributes['addetionalPrice'];
         } catch (\Throwable $th) {
             $addPrice = 0;
         }
 
         try {
-            $this->attributes['discount'];
+            $discount = $this->attributes['discount'];
         } catch (\Throwable $th) {
             $discount = 0;
         }

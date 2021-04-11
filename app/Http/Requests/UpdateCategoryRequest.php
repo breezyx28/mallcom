@@ -28,7 +28,9 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name' => 'string|max:200',
             'subCategory' => 'string|max:200',
-            'status' => 'boolean'
+            'status' => 'boolean',
+            'sub_img' => 'image|mimes:png,jpg',
+            'cat_img' => 'image|mimes:png,jpg'
         ];
     }
 

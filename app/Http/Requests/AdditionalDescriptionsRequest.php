@@ -27,7 +27,7 @@ class AdditionalDescriptionsRequest extends FormRequest
     {
         return [
             'color' => 'string|max:191',
-            'weight' => 'string|max:191',
+            'weight' => 'integer',
             'for' => 'string|max:191',
             'company' => 'string|max:191',
             'expireDate' => 'date',

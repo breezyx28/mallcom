@@ -3,7 +3,9 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountsControllerResource;
 use App\Http\Controllers\AdditionalDescriptionControllerResource;
+use App\Http\Controllers\AdsController;
 use App\Http\Controllers\AdsControllerResource;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryControllerResource;
 use App\Http\Controllers\FavouritControllerResource;
 use App\Http\Controllers\InvoiceControllerResource;
@@ -12,7 +14,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaterialControllerResource;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderControllerResource;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductControllerResource;
+use App\Http\Controllers\ProductSizesControllerResource;
 use App\Http\Controllers\ProductsPhotoControllerResource;
 use App\Http\Controllers\RateControllerResource;
 use App\Http\Controllers\RegisterController;
@@ -33,7 +37,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 
 const BASE = 'v1/user';
-const GUEST = 'v1/guest';
+const GUEST = 'v1/public';
 const ADMIN = 'v1/admin';
 
 // Route::get(GUEST . 'facebook/redirect', function () {
@@ -50,6 +54,39 @@ Route::post(BASE . '/login', [LoginController::class, 'Login']);
 Route::post(BASE . '/register', [RegisterController::class, 'register']);
 
 Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
+
+// public routes
+Route::group(['prefix' => GUEST], function () {
+    // products
+    Route::ApiResource('products', ProductControllerResource::class)->only('index', 'show');
+    Route::get('top', [ProductController::class, 'topProduct']);
+    Route::get('todayProducts', [ProductController::class, 'todayProducts']);
+    Route::post('getProducts', [ProductController::class, 'getProducts']);
+
+    // additional Description
+    Route::ApiResource('additionalDescription', AdditionalDescriptionControllerResource::class)->only('index');
+
+    // products photos
+    Route::ApiResource('productsPhotos', ProductsPhotoControllerResource::class)->only('index');
+
+    // states
+    Route::apiResource('states', StateControllerResource::class)->only('index');
+
+    // categories
+    Route::apiResource('categories', CategoryControllerResource::class)->only('index');
+    Route::get('categoryList', [CategoryController::class, 'categoryList']);
+
+    // sizes
+    Route::apiResource('sizes', SizesControllerResource::class)->only('index');
+
+    // materials
+    Route::apiResource('materilas', MaterialControllerResource::class)->only('index');
+
+    // ads
+    Route::apiResource('ads', AdsControllerResource::class)->only('index');
+    Route::get('adsOptions', [AdsController::class, 'AdsOptions']);
+    Route::get('adsGroupBy', [AdsController::class, 'AdsGroupBy']);
+});
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 
@@ -109,6 +146,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // products photos
         Route::ApiResource('productsPhotos', ProductsPhotoControllerResource::class);
+
+        // products sizes
+        Route::ApiResource('productSizes', ProductSizesControllerResource::class);
 
         // accounts
         Route::resource('accounts', AccountsControllerResource::class)->only('index');

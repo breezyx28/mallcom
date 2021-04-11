@@ -29,6 +29,8 @@ class CategoriesRequest extends FormRequest
         return [
             'name' => 'required|string|max:200',
             'subCategory' => 'required|string|max:200',
+            'cat_img' => 'required|image|mimes:png,jpg',
+            'sub_img' => 'image|mimes:png,jpg',
         ];
     }
 

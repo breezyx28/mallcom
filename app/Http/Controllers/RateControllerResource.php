@@ -40,9 +40,15 @@ class RateControllerResource extends Controller
      * @param  \App\Models\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function show(Rate $rate)
+    public function show(Product $product)
     {
-        return Resp::Success('تم', $rate->with('user', 'product')->get());
+        $rateBase = 100;
+        $ratersNumber = \App\Models\Rate::where('user_id', $product->id)->count();
+        $totalRates = \App\Models\Rate::where('user_id', $product->id)->sum();
+
+        $percent = ((($totalRates) / ($rateBase * $ratersNumber)) * 100);
+
+        return Resp::Success('تم', $product->with('rate')->get()->concat(['total_rate' => $percent]));
     }
 
     /**
@@ -61,7 +67,7 @@ class RateControllerResource extends Controller
         DB::beginTransaction();
         try {
             // save rate first
-            $rateModel = \App\Models\Rate::updateOrCreate(
+            \App\Models\Rate::updateOrCreate(
                 ['user_id' => auth()->user()->id, 'product_id' => $rate->id],
                 ['rate' => $validate->rate]
             );

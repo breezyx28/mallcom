@@ -7,6 +7,7 @@ use App\Http\Requests\CategoriesRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryControllerResource extends Controller
 {
@@ -37,8 +38,13 @@ class CategoryControllerResource extends Controller
             $cat->$key = $value;
         }
 
+        $cat->sub_img = Str::of($request->file('sub_img')->store('public/Category'))->substr(7);
+        $cat->cat_img = Str::of($request->file('cat_img')->store('public/Category'))->substr(7);
+
+        // return Resp::Success('ok', Str::of($request->file('cat_img')->store('public/Category'))->substr(7));
         try {
             $cat->save();
+            $cat::where('name', $cat->name)->update(['cat_img' => Str::of($request->file('cat_img')->store('public/Category'))->substr(7)]);
             return Resp::Success('تم', $cat);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
@@ -73,8 +79,12 @@ class CategoryControllerResource extends Controller
             $cat->$key = $value;
         }
 
+        $cat->sub_img = Str::of($request->file('sub_img')->store('public/Category'))->substr(7);
+        $cat->cat_img = Str::of($request->file('cat_img')->store('public/Category'))->substr(7);
+
         try {
             $cat->save();
+            $Category::where('name', $cat->name)->update(['cat_img' => Str::of($request->file('cat_img')->store('public/Category'))->substr(7) ? Str::of($request->file('cat_img')->store('public/Category'))->substr(7) : null]);
             return Resp::Success('تم', $cat);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());

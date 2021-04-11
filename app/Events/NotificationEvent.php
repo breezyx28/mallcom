@@ -10,7 +10,7 @@ class NotificationEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $user_id, $content;
+    public $user_id, $content;
 
     public function __construct($user_id, $type)
     {

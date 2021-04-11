@@ -6,6 +6,7 @@ use App\Events\StoreProductEvent;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
+use App\Helper\ValidateArray;
 use App\Http\Requests\ProductsRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\StoreProduct;

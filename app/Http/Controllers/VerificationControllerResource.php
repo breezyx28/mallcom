@@ -14,7 +14,6 @@ class VerificationControllerResource extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**

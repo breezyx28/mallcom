@@ -1,12 +1,12 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => 'db44b4d890fd2d2a4a8f8ea50c26ca89d6cf87d8',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -126,12 +126,12 @@
     ),
     'fakerphp/faker' => 
     array (
-      'pretty_version' => 'v1.13.0',
-      'version' => '1.13.0.0',
+      'pretty_version' => 'v1.14.1',
+      'version' => '1.14.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'ab3f5364d01f2c2c16113442fb987d26e4004913',
+      'reference' => 'ed22aee8d17c7b396f74a58b1e7fefa4f90d5ef1',
     ),
     'fideloper/proxy' => 
     array (
@@ -440,12 +440,12 @@
     ),
     'laravel/laravel' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => 'db44b4d890fd2d2a4a8f8ea50c26ca89d6cf87d8',
     ),
     'laravel/sail' => 
     array (

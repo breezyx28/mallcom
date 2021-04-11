@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ResponseMessage as Resp;
+use App\Http\Requests\ProductSizesRequest;
 use App\Models\ProductSizes;
 use Illuminate\Http\Request;
 
@@ -23,9 +25,26 @@ class ProductSizesControllerResource extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function store(ProductSizesRequest $request)
     {
-        //
+        $validate = (object) $request->validated();
+
+        $prodSizes = new \App\Models\ProductSizes();
+
+        foreach ($validate as $key => $value) {
+            // if ($validate->sizes_array) {
+            //     $validate->sizes_array = json_encode($validate->sizes_array);
+            // }
+            $prodSizes->$key = $value;
+        }
+
+        try {
+            $prodSizes->save();
+            return Resp::Success('تم', $prodSizes);
+        } catch (\Exception $e) {
+            return Resp::Error('حدث خطأ ما', $e->getMessage());
+        }
     }
 
     /**
