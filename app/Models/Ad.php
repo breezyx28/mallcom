@@ -24,9 +24,9 @@ class Ad extends Model
         if ($value) {
 
             // replace http://localhost to by htpp://127.0.0.1
-            $base_url = str_replace('http"//localhost', env('DB_HOST'), env('APP_URL'));
+            $base_url = str_replace('localhost', env('DB_HOST'), env('APP_URL'));
 
-            return 'https://' . $base_url . ':' . $_SERVER['SERVER_PORT'] . "/storage/" . $value;
+            return $base_url . ':' . $_SERVER['SERVER_PORT'] . "/storage/" . $value;
         }
     }
 }
