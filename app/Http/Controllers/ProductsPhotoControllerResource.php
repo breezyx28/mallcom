@@ -19,7 +19,7 @@ class ProductsPhotoControllerResource extends Controller
      */
     public function index()
     {
-        $all = ProductsPhoto::with('product')->all();
+        $all = ProductsPhoto::with('product')->get();
         return Resp::Success('تم', $all);
     }
 
