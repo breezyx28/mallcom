@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
 
-const BASE = 'v1/user';
+const BASES = 'v1/user';
 const GUEST = 'v1/public';
 const ADMIN = 'v1/admin';
 
@@ -50,10 +50,10 @@ const ADMIN = 'v1/admin';
 //     // $user->token
 // });
 
-Route::post(BASE . '/login', [LoginController::class, 'Login']);
-Route::post(BASE . '/register', [RegisterController::class, 'register']);
+Route::post(BASES . '/login', [LoginController::class, 'Login']);
+Route::post(BASES . '/register', [RegisterController::class, 'register']);
 
-Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
+Route::get(BASES . '/filter', [StatisticsController::class, 'productsFilter']);
 
 // public routes
 Route::group(['prefix' => GUEST], function () {
@@ -90,7 +90,7 @@ Route::group(['prefix' => GUEST], function () {
 
 Route::group(['middleware' => 'auth.jwt'], function () {
 
-    Route::group(['prefix' => BASE, 'middleware' => 'userWare'], function () {
+    Route::group(['prefix' => BASES, 'middleware' => 'userWare'], function () {
 
         // user personal
         Route::get('profile', [LoginController::class, 'profile']);
@@ -115,7 +115,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::apiResource('rate', RateControllerResource::class)->except('store', 'destroy');
     });
 
-    Route::group(['prefix' => BASE, 'middleware' => 'storeWare'], function () {
+    Route::group(['prefix' => BASES, 'middleware' => 'storeWare'], function () {
 
         // store product
         Route::ApiResource('product', StoreProductsControllerResource::class);
@@ -130,7 +130,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
 
         // statistics
-        Route::get(BASE . '/statistics', [StatisticsController::class, 'statistics']);
+        Route::get(BASES . '/statistics', [StatisticsController::class, 'statistics']);
 
         // users
         Route::apiResource('users', UserControllerResource::class);
