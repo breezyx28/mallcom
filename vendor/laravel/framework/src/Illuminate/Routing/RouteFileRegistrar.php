@@ -2,6 +2,8 @@
 
 namespace Illuminate\Routing;
 
+use Illuminate\Support\Facades\Log;
+
 class RouteFileRegistrar
 {
     /**
@@ -31,6 +33,10 @@ class RouteFileRegistrar
     public function register($routes)
     {
         $router = $this->router;
+
+        Log::alert('erorrrrrrrrrrrr', [
+            'error' => $router
+        ]);
 
         require $routes;
     }
