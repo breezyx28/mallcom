@@ -17,7 +17,7 @@ class NotificationControllerResource extends Controller
      */
     public function index()
     {
-        $all = Notification::with('user')->all();
+        $all = Notification::with('user')->get();
 
         return Resp::Success('تم', $all);
     }
