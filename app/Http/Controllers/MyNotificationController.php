@@ -12,7 +12,7 @@ class MyNotificationController extends Controller
     {
 
         $all = Notification::with(['user' => function ($query) {
-            return $query->where('user_id', auth()->user()->id);
+            return $query->where('id', 5);
         }])->get();
 
         return Resp::Success('تم', $all);
