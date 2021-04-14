@@ -79,12 +79,12 @@ class CategoryControllerResource extends Controller
             $cat->$key = $value;
         }
 
-        $cat->sub_img = Str::of($request->file('sub_img')->store('public/Category'))->substr(7);
-        $cat->cat_img = Str::of($request->file('cat_img')->store('public/Category'))->substr(7);
+        $cat->sub_img = Str::of($request->file('sub_img')->storePublicly('Category'));
+        $cat->cat_img = Str::of($request->file('cat_img')->storePublicly('Category'));
 
         try {
             $cat->save();
-            $Category::where('name', $cat->name)->update(['cat_img' => Str::of($request->file('cat_img')->store('public/Category'))->substr(7) ? Str::of($request->file('cat_img')->store('public/Category'))->substr(7) : null]);
+            $Category::where('name', $cat->name)->update(['cat_img' => Str::of($request->file('cat_img')->storePublicly('Category')) ? Str::of($request->file('cat_img')->storePublicly('Category')) : null]);
             return Resp::Success('تم', $cat);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
