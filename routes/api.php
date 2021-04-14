@@ -12,6 +12,7 @@ use App\Http\Controllers\InvoiceControllerResource;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaterialControllerResource;
+use App\Http\Controllers\NotificationControllerResource;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderControllerResource;
 use App\Http\Controllers\ProductController;
@@ -113,6 +114,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // rate product
         Route::apiResource('rate', RateControllerResource::class)->except('store', 'destroy');
+
+        // rate notification
+        Route::apiResource('myNotifications', NotificationControllerResource::class)->only('index');
     });
 
     Route::group(['prefix' => BASE, 'middleware' => 'storeWare'], function () {
