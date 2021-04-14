@@ -16,6 +16,6 @@ class Notification extends Model
 
     public function getUpdatedAtAttribute()
     {
-        return $this->diffForHumans();
+        return $this->updated_at->diffForHumans();
     }
 }
