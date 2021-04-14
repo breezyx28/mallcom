@@ -31,10 +31,11 @@ class Category extends Model
     {
         if ($value) {
 
-            // replace http://localhost to by htpp://127.0.0.1
-            $base_url = str_replace('localhost', env('DB_HOST'), env('APP_URL'));
+            // // replace http://localhost to by htpp://127.0.0.1
+            // $base_url = str_replace('localhost', env('DB_HOST'), env('APP_URL'));
 
-            return $base_url . ':' . $_SERVER['SERVER_PORT'] . "/storage/" . $value;
+            // return $base_url . ':' . $_SERVER['SERVER_PORT'] . "/storage/" . $value;
+            return 'https://laravelstorage.sgp1.digitaloceanspaces.com/' . $value;
         }
     }
 }
