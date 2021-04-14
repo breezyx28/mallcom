@@ -50,7 +50,7 @@ class UserControllerResource extends Controller
             $user->$key = $value;
         }
 
-        $user->thumbnail = Str::of($request->file('thumbnail')->store('public/Profile'))->substr(7);
+        $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
 
         $user->role_id = 3;
 

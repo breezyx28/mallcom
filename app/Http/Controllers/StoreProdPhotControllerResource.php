@@ -49,7 +49,7 @@ class StoreProdPhotControllerResource extends Controller
 
         foreach ($request['photo'] as $key => $value) {
 
-            $prodPho->photo = Str::of($request->file('photo.' . $key)->store('public/Product'))->substr(7);
+            $prodPho->photo = Str::of($request->file('photo.' . $key)->storePublicly('Product', 'spaces'));
 
             $prodPho->product_id = $validate->product_id;
 
@@ -102,7 +102,7 @@ class StoreProdPhotControllerResource extends Controller
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
-        $productsPhoto->photo = Str::of($request->file('photo')->store('public/Product'))->substr(7);
+        $productsPhoto->photo = Str::of($request->file('photo')->storePublicly('Product'));
 
         try {
             $productsPhoto->save();

@@ -37,7 +37,7 @@ class couponsControllerResource extends Controller
 
         foreach ($validate as $key => $value) {
             if ($validate->$key == 'photo') {
-                $coupon->photo = Str::of($request->file('photo')->store('public/Coupons'))->substr(7);
+                $coupon->photo = Str::of($request->file('photo')->storePublicly('Coupons'));
             }
             $coupon->$key = $value;
         }
@@ -73,7 +73,7 @@ class couponsControllerResource extends Controller
 
         foreach ($validate as $key => $value) {
             if ($validate->$key == 'photo') {
-                $coupon->photo = Str::of($request->file('photo')->store('public/Coupons'))->substr(7);
+                $coupon->photo = Str::of($request->file('photo')->storePublicly('Coupons'));
             }
             $coupon->$key = $value;
         }

@@ -49,14 +49,14 @@ class StoreProductsControllerResource extends Controller
                 $this->storeID = $validate->store_id;
             }
 
-            if (isset($validate->description)) {
-                $validate->description = json_encode($validate->description);
-            }
+            // if (isset($validate->description)) {
+            //     $validate->description = json_encode($validate->description);
+            // }
 
             $product->$key = $value;
         }
 
-        $product->photo = Str::of($request->file('photo')->store('public/Product'))->substr(7);
+        $product->photo = Str::of($request->file('photo')->storePublicly('Product'));
 
         return event(new StoreProductEvent($product, $this->storeID))[0]->original;
     }
@@ -94,7 +94,7 @@ class StoreProductsControllerResource extends Controller
         }
 
         if (isset($request['photo'])) {
-            $product->photo = Str::of($request->file('photo')->store('public/Product'))->substr(7);
+            $product->photo = Str::of($request->file('photo')->storePublicly('Product'));
         }
 
         try {

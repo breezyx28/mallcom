@@ -63,7 +63,7 @@ class ProductControllerResource extends Controller
             $prod->$key = $value;
         }
 
-        $prod->photo = Str::of($request->file('photo')->store('public/Product'))->substr(7);
+        $prod->photo = Str::of($request->file('photo')->storePublicly('Product'));
 
         try {
             $prod->save();

@@ -38,7 +38,7 @@ class ProductsPhotoControllerResource extends Controller
 
         foreach ($request['photo'] as $key => $value) {
 
-            $prodPho->photo = Str::of($request->file('photo.' . $key)->store('public/Product'))->substr(7);
+            $prodPho->photo = Str::of($request->file('photo.' . $key)->storePublicly('Product'));
 
             $prodPho->product_id = $validate->product_id;
 
@@ -83,7 +83,7 @@ class ProductsPhotoControllerResource extends Controller
     {
         $request->validated();
 
-        $ProductsPhoto->photo = Str::of($request->file('photo')->store('public/Product'))->substr(7);
+        $ProductsPhoto->photo = Str::of($request->file('photo')->storePublicly('Product'));
 
         try {
             $ProductsPhoto->save();

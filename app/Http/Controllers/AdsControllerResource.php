@@ -37,7 +37,7 @@ class AdsControllerResource extends Controller
             $ad->$key = $value;
         }
 
-        $ad->photo = Str::of($request->file('photo')->store('public/Ads'))->substr(7);
+        $ad->photo = Str::of($request->file('photo')->storePublicly('Ads'));
 
         try {
             $ad->save();
@@ -75,7 +75,7 @@ class AdsControllerResource extends Controller
         }
 
         if (isset($ad->photo)) {
-            $ad->photo = Str::of($request->file('photo')->store('public/Ads'))->substr(7);
+            $ad->photo = Str::of($request->file('photo')->storePublicly('Ads'));
         }
 
         try {

@@ -38,7 +38,7 @@ class StoreControllerResource extends Controller
             $store->$key = $value;
         }
 
-        $store->thumbnail = Str::of($request->file('thumbnail')->store('public/Stores'))->substr(7);
+        $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
 
         try {
             $store->save();
@@ -76,7 +76,7 @@ class StoreControllerResource extends Controller
             $store->$key = $value;
         }
 
-        $store->thumbnail = Str::of($request->file('thumbnail')->store('public/Stores'))->substr(7);
+        $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
 
         try {
             $store->save();
