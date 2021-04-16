@@ -12,7 +12,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    // protected $appends = ['position'];
+    protected $with = ['account'];
 
     public function state()
     {
@@ -22,6 +22,11 @@ class User extends Authenticatable implements JWTSubject
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function account()
+    {
+        return $this->hasMany(Account::class, 'user_id', 'id');
     }
 
 

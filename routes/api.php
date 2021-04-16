@@ -63,6 +63,7 @@ Route::group(['prefix' => GUEST], function () {
     Route::get('top', [ProductController::class, 'topProduct']);
     Route::get('todayProducts', [ProductController::class, 'todayProducts']);
     Route::post('getProducts', [ProductController::class, 'getProducts']);
+    Route::get('productsWith', [ProductController::class, 'productsWith']);
 
     // additional Description
     Route::ApiResource('additionalDescription', AdditionalDescriptionControllerResource::class)->only('index');
@@ -105,6 +106,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         // user orders
         Route::apiResource('order', UserOrderControllerResource::class)->except('destroy', 'update');
         Route::get('myOrders', [OrderController::class, 'myOrders']);
+        Route::get('getMyOrder', [OrderController::class, 'getMyOrde']);
 
         // user account
         Route::apiResource('myAccount', UserAccountControllerResource::class);

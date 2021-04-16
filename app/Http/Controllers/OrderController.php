@@ -27,4 +27,22 @@ class OrderController extends Controller
 
         return Resp::Success('تم', $orders);
     }
+
+    public function getMyOrde(Request $request)
+    {
+
+        $validate = (object) $request->validate([
+            'orderNumber' => 'string|max:191'
+        ]);
+
+        try {
+
+            $orders = \App\Models\Order::where('orderNumber', $validate->orderNumber)->get();
+
+            return Resp::Success('ok', $orders);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
+    }
 }
