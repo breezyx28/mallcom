@@ -58,12 +58,14 @@ Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
 
 // public routes
 Route::group(['prefix' => GUEST], function () {
+
     // products
     Route::ApiResource('products', ProductControllerResource::class)->only('index', 'show');
     Route::get('top', [ProductController::class, 'topProduct']);
     Route::get('todayProducts', [ProductController::class, 'todayProducts']);
-    Route::post('getProducts', [ProductController::class, 'getProducts']);
     Route::get('productsWith', [ProductController::class, 'productsWith']);
+    Route::post('getProducts', [ProductController::class, 'getProducts']);
+    Route::get('randomProducts', [ProductController::class, 'randomProducts']);
 
     // additional Description
     Route::ApiResource('additionalDescription', AdditionalDescriptionControllerResource::class)->only('index');

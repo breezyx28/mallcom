@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\ResponseMessage as Resp;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
@@ -113,5 +114,13 @@ class ProductController extends Controller
             //throw $th;
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
+    }
+
+    public function randomProducts()
+    {
+
+        $data = Product::inRandomOrder()->limit(3)->get();
+
+        return Resp::Success('ok', $data);
     }
 }

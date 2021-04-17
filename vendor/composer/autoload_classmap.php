@@ -26,6 +26,7 @@ return array(
     'App\\Http\\Controllers\\InvoicesController' => $baseDir . '/app/Http/Controllers/InvoicesController.php',
     'App\\Http\\Controllers\\LoginController' => $baseDir . '/app/Http/Controllers/LoginController.php',
     'App\\Http\\Controllers\\MaterialControllerResource' => $baseDir . '/app/Http/Controllers/MaterialControllerResource.php',
+    'App\\Http\\Controllers\\MyNotificationController' => $baseDir . '/app/Http/Controllers/MyNotificationController.php',
     'App\\Http\\Controllers\\NotificationControllerResource' => $baseDir . '/app/Http/Controllers/NotificationControllerResource.php',
     'App\\Http\\Controllers\\OrderController' => $baseDir . '/app/Http/Controllers/OrderController.php',
     'App\\Http\\Controllers\\OrderControllerResource' => $baseDir . '/app/Http/Controllers/OrderControllerResource.php',

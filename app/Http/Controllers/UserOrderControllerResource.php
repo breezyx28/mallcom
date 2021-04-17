@@ -61,7 +61,7 @@ class UserOrderControllerResource extends Controller
             return Resp::Error('حدث خطأ في حفظ رقم الطلبات');
         }
 
-        $productsIDs = [];
+        $totals = [];
 
         foreach ($validate['orders'] as $key => $value) {
 
@@ -70,13 +70,14 @@ class UserOrderControllerResource extends Controller
             $validate['orders'][$key]['user_id'] = $user->id;
             $validate['orders'][$key]['created_at'] = Carbon::now();
             $validate['orders'][$key]['updated_at'] = Carbon::now();
-            array_push($productsIDs, $value['product_id']);
+
+            array_push($totals, ((\App\Models\Product::find($value['product_id'])->final_price) * $value['amount']));
         }
 
         // find all products id
-        $products = collect(\App\Models\Product::find($productsIDs));
+        $totalPrice = collect($totals)->sum();
 
-        $totalPrice = $products->sum('final_price');
+        // $totalPrice = $totals->sum('final_price');
 
         try {
 
