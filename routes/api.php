@@ -32,6 +32,7 @@ use App\Http\Controllers\StoreProductsControllerResource;
 use App\Http\Controllers\UserAccountControllerResource;
 use App\Http\Controllers\UserControllerResource;
 use App\Http\Controllers\UserOrderControllerResource;
+use App\Http\Controllers\VerificationControllerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -58,6 +59,8 @@ Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
 
 // public routes
 Route::group(['prefix' => GUEST], function () {
+    // verifications
+    Route::apiResource('verify', VerificationControllerResource::class)->only('store');
 
     // products
     Route::ApiResource('products', ProductControllerResource::class)->only('index', 'show');

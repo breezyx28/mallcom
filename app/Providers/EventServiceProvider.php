@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\InvoiceEvent;
 use App\Events\NotificationEvent;
+use App\Events\sendVerificationEvent;
 use App\Events\StoreProductEvent;
 use App\Http\Controllers\InvoiceControllerResource;
 use App\Listeners\NotificationListener;
 use App\Listeners\OrdersInvoiceListener;
+use App\Listeners\SendVerificationListener;
 use App\Listeners\StoreProductListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -30,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         NotificationEvent::class => [
             NotificationListener::class,
+        ],
+        sendVerificationEvent::class => [
+            SendVerificationListener::class,
         ],
     ];
 

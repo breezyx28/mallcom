@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NotificationEvent;
+use App\Events\sendVerificationEvent;
 use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\UsersRequest;
@@ -38,6 +39,7 @@ class RegisterController extends Controller
 
             event(new NotificationEvent($user->id, 'welcome'));
             event(new NotificationEvent($user->id, 'verify'));
+            event(new sendVerificationEvent($user));
 
             return Resp::Success('تم إنشاء مستخدم بنجاح', $user);
         } catch (\Exception $e) {
