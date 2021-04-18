@@ -37,7 +37,8 @@ class UsersRequest extends FormRequest
             'email' => 'string|regex:/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/|max:191',
             'address' => 'string|max:191',
             'state_id' => 'required|exists:states,id|integer',
-            'birthDate' => ['date', new dateFormatRule()],
+            // 'birthDate' => ['date', new dateFormatRule()],
+            'birthDate' => 'date',
             'gender' => ['required', Rule::in(['ذكر', 'انثى'])],
             'password' => 'required|string|max:191',
         ];

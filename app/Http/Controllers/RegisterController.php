@@ -27,6 +27,8 @@ class RegisterController extends Controller
                 $user->password = null;
             }
 
+            $user->birthDate = date('y-m-d', strtotime($validate->birthDate));
+
             $user->$key = $value;
         }
 
