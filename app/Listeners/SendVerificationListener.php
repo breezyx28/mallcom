@@ -15,7 +15,7 @@ class SendVerificationListener
 {
     public function handle($event)
     {
-        $code = rand(999999, 1000000);
+        $code = rand(100000, 999999);
 
         // send sms first
         $sms = new SMS($code);
