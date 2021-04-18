@@ -14,7 +14,7 @@ class sendVerificationEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $user;
+    public $user;
 
     public function __construct($user)
     {
