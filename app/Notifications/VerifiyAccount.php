@@ -17,10 +17,11 @@ class VerifiyAccount extends Notification
      * @return void
      */
 
-    private $code;
-    public function __construct($code)
+    private $code, $user_id;
+    public function __construct($code, $user_id)
     {
         $this->code = $code;
+        $this->user_id = $user_id;
     }
 
     /**
@@ -44,7 +45,7 @@ class VerifiyAccount extends Notification
     {
         return (new MailMessage)
             ->line('Please Click the link to verify your account')
-            ->action('Verify', url('/api/v1/public/verifyAccount?code=' . $this->code))
+            ->action('Verify', url('/api/v1/public/verifyAccount?id=' . $this->user_id . '&code=' . $this->code))
             ->line('Thank you MallCom Client!');
     }
 

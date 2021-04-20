@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\ResponseMessage as Resp;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 
 class VerificationController extends Controller
 {
@@ -60,5 +61,21 @@ class VerificationController extends Controller
         }
 
         return Resp::Success('SMS Sent Successfuly', 'تم إرسال رمز التأكيد إلى ' . $phone,);
+    }
+
+    public function verifyAccount(Request $request)
+    {
+        $validate = (object) $request->validate([
+            'id' => 'required|integer',
+            'code' => 'required|numberic'
+        ]);
+
+        try {
+            //code...
+            \App\Models\Verification::where(['user_id' => $validate->id, 'code' => $validate->code])->update(['verified' => 1]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('Error while verifying', $th->getMessage());
+        }
     }
 }

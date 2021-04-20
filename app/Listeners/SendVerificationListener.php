@@ -30,7 +30,7 @@ class SendVerificationListener
                 $verify->code = $code;
                 $verify->user_id = $event->user->id;
                 $verify->verified = 0;
-                $event->user->notify(new VerifiyAccount($code));
+                $event->user->notify(new VerifiyAccount($event->user->id, $code));
                 // Notification::send($event->user, new VerifiyAccount($code));
                 $verify->save();
             } catch (\Throwable $th) {
