@@ -97,22 +97,32 @@ class ProductController extends Controller
             'subCategory' => 'string',
         ]);
 
-        if (isset($validate->category) || isset($validate->subCategory)) {
-
-            $filtered = \App\Models\Product::with(['category' => function ($query) use ($validate) {
-                $query->where('name', $validate->category)->orWhere('subCategory', $validate->subCategory);
-            }, 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes'])->get();
+        if (isset($validate->category)) {
+            $filtered = \App\Models\Product::whereHas('category', function ($query) use ($validate) {
+                $query->where('name', $validate->category);
+            })->with('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes')->get();
 
             return Resp::Success('تم', $filtered);
         }
 
-        try {
-            //code...
-            $all = \App\Models\Product::with('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes')->get();
-            return Resp::Success('تم', $all);
-        } catch (\Throwable $th) {
-            //throw $th;
-            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        if (isset($validate->subCategory)) {
+            $filtered = \App\Models\Product::whereHas('category', function ($query) use ($validate) {
+                $query->where('subCategory', '=', $validate->subCategory);
+            })->with(['category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes'])->get();
+
+            return Resp::Success('تم', $filtered);
+        }
+
+        if (!isset($validate->subCategory) && !isset($validate->category)) {
+
+            try {
+                //code...
+                $all = \App\Models\Product::with('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes')->get();
+                return Resp::Success('تم', $all);
+            } catch (\Throwable $th) {
+                //throw $th;
+                return Resp::Error('حدث خطأ ما', $th->getMessage());
+            }
         }
     }
 
