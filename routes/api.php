@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         // user orders
         Route::apiResource('order', UserOrderControllerResource::class)->except('destroy', 'update');
         Route::get('myOrders', [OrderController::class, 'myOrders']);
-        Route::get('getMyOrder', [OrderController::class, 'getMyOrde']);
+        Route::get('getMyOrder', [OrderController::class, 'getMyOrder']);
 
         // user account
         Route::apiResource('myAccount', UserAccountControllerResource::class);

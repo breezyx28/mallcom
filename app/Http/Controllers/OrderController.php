@@ -6,6 +6,7 @@ use App\Events\InvoiceEvent;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\OrdersRequest;
 use App\Models\Invoice;
+use App\Models\Order;
 use App\Models\OrdersNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,9 +38,29 @@ class OrderController extends Controller
         try {
             $orders = \App\Models\OrdersNumber::where('orderNumber', $validate->orderNumber)->get();
 
-            $res = \App\Models\Order::all();
+            $ord = DB::table('orders');
 
-            return Resp::Success('ok', $res);
+            $res = $ord
+                ->join("products", "orders.product_id", "products.id")
+                ->join("users", "orders.user_id", "users.id")
+                ->select(
+                    "users.id as userID",
+                    "users.firstName",
+                    "users.middleName",
+                    "users.lastName",
+                    "orders.*",
+                    "products.id as productID",
+                    "products.name as productName",
+                    "products.price as productPrice",
+                    "products.discount as productDiscount",
+                    "products.addetionalPrice as productAddetionalPrice",
+                )
+                ->selectRaw('(products.price - (products.price * (products.discount/100))) + products.addetionalPrice as final_price')
+                ->where('orders_number_id', $orders[0]->id)->get();
+
+            $invoiceInfo = \App\Models\invoice::where('orderNumber', $validate->orderNumber)->get();
+
+            return Resp::Success('ok', ["orderInfo" => $res, "userInfo" => auth()->user(), "invoiceInfo" => $invoiceInfo]);
         } catch (\Throwable $th) {
             //throw $th;
             return Resp::Error('حدث خطأ ما', $th->getMessage());
