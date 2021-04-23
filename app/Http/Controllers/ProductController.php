@@ -18,55 +18,62 @@ class ProductController extends Controller
             'limit' => 'integer'
         ]);
 
-        $orders = new \App\Models\Order();
+        $orders = DB::table('orders');
         $products = new \App\Models\Product();
 
-        // products of this week
-        $prods = $orders
-            ->whereDate('created_at', '>', Carbon::now()->subDays(7))
-            ->get('product_id');
+        // // products of this week
+        // $prods = $orders
+        //     ->whereDate('created_at', '>', Carbon::now()->subDays(7))
+        //     ->get('product_id');
 
-        // all products id
-        $plk = $prods->pluck('product_id');
+        // // all products id
+        // $plk = $prods->pluck('product_id');
 
-        // loop through
-        $arr = [];
-        foreach ($plk as $key => $value) {
-            array_push($arr[$value], $prods->where('product_id', $value)->count());
-        }
+        // // loop through
+        // $arr = [];
+        // foreach ($plk as $key => $value) {
+        //     array_push($arr[$value], $prods->where('product_id', $value)->count());
+        // }
 
-        return json_encode($prods);
         $top = [
             'sells' => function () use ($orders, $validate) {
-                return $orders::count('product_id')
-                    ->orderBy('product_id', 'desc')
+                return $orders
+                    ->select('product_id')->groupBy('product_id')
                     ->take(isset($validate->limit) ? $validate->limit : 10)
-                    ->get();
+                    ->pluck('product_id');
             },
-            'rate' => function () use ($products, $validate) {
-                return $products->where('status', 1)->limit(isset($validate->limit) ? $validate->limit : 10)->orderBy('updated_at')->get();
-            },
+            'rate' => $products->whereHas('rate', function ($q) use ($validate) {
+                $q->select('rate')->limit(isset($validate->limit) ? $validate->limit : 10)->orderBy('rate');
+            })->get(),
             'discount' => (function () use ($products, $validate) {
                 return $products->where('status', 1)->limit(isset($validate->limit) ? $validate->limit : 10)->orderBy('price', 'desc')->get();
             }),
         ][$validate->top];
-
-        return json_encode($orders::count('product_id'));
 
         return Resp::Success('تم', $top);
     }
 
     public function todayProducts(Request $request)
     {
-
         $validate = (object) $request->validate([
             'column' => 'string|max:191',
+            'exp' => 'string|min:0,max:5',
             'value' => 'string|max:191',
             'limit' => 'required|integer'
         ]);
 
         if (isset($validate->column) || isset($validate->value)) {
-            $data = \App\Models\Product::with('category', 'store')->where($validate->column, $validate->value)->limit(isset($validate->limit) ? $validate->limit : 10)->orderBy('updated_at', 'desc')->get();
+
+            $switch = [
+                '0' => '=',
+                '1' => '>',
+                '2' => '<',
+                '3' => '>=',
+                '4' => '<=',
+                '5' => 'like'
+            ][$validate->exp];
+
+            $data = \App\Models\Product::with('category', 'store')->where($validate->column, $switch, $validate->value)->limit(isset($validate->limit) ? $validate->limit : 10)->orderBy('updated_at', 'desc')->get();
             return Resp::Success('تم', $data);
         } else {
             $data = \App\Models\Product::with('category', 'store')->where('status', 1)->limit($validate->limit)->orderBy('updated_at', 'desc')->get();
@@ -128,7 +135,6 @@ class ProductController extends Controller
 
     public function randomProducts()
     {
-
         $data = Product::inRandomOrder()->limit(3)->get();
 
         return Resp::Success('ok', $data);
