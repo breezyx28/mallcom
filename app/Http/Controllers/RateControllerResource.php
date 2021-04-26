@@ -63,17 +63,16 @@ class RateControllerResource extends Controller
         // get validated request
         $validate = (object) $request->validated();
 
-
         DB::beginTransaction();
         try {
             // save rate first
-            \App\Models\Rate::updateOrCreate(
+            $product = \App\Models\Rate::updateOrCreate(
                 ['user_id' => auth()->user()->id, 'product_id' => $rate->id],
                 ['rate' => $validate->rate]
             );
 
             // update product
-            $product = $rate->increment('rate', $validate->rate);
+            // $product = $rate->increment('rate', $validate->rate);
 
 
             DB::commit();

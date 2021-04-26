@@ -26,7 +26,7 @@ class UpdateRateRequest extends FormRequest
     public function rules()
     {
         return [
-            'rate' => 'integer|min:0|max:100'
+            'rate' => 'integer|min:0|max:10'
         ];
     }
 

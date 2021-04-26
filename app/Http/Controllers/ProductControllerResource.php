@@ -42,7 +42,7 @@ class ProductControllerResource extends Controller
      */
     public function show(Product $Product)
     {
-        $Product->load('category', 'store', 'rate', 'product_photos', 'additional_description', 'product_sizes');
+        $Product->load('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes');
         return Resp::Success('تم', $Product);
     }
 
