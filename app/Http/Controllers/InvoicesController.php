@@ -12,7 +12,7 @@ class InvoicesController extends Controller
 
         $user = auth()->user();
 
-        $invoices = \App\Models\Invoice::where('user_id', $user->id)->get();
+        $invoices = \App\Models\Invoice::with('account')->where('user_id', $user->id)->get();
 
         return Resp::Success('done', $invoices);
     }

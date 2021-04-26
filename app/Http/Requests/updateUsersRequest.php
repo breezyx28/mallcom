@@ -29,7 +29,7 @@ class updateUsersRequest extends FormRequest
     {
         return [
             'firstName' => 'string|max:191',
-            'username' => 'unique:users|string|max:191',
+            'userName' => 'unique:users|string|max:191',
             'middleName' => 'string|max:191',
             'LastName' => 'string|max:191',
             'thumbnail' => 'image|mimes:jpg,jpeg,png',

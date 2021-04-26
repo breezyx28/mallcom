@@ -23,19 +23,22 @@ class RegisterController extends Controller
         foreach ($validate as $key => $value) {
 
             if ($validate->$key == 'thumbnail') {
-                $user->thumbnail = null;
+                // $user->thumbnail = null;
+                $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
             }
             if ($validate->$key == 'password') {
                 $user->password = null;
             }
 
-            $user->birthDate = date('Y-m-d', strtotime($validate->birthDate));
+            if ($validate->$key == 'birthDate') {
+
+                $user->birthDate = date('Y-m-d', strtotime($validate->birthDate));
+            }
 
             $user->$key = $value;
         }
 
         $user->password = Hash::make($request->password);
-        $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
         $user->role_id = 3;
 
         DB::beginTransaction();

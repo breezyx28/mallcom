@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth as JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -41,7 +42,6 @@ class LoginController extends Controller
 
     public function profile()
     {
-
         return Resp::Success('تم', auth()->user());
     }
 
@@ -54,8 +54,24 @@ class LoginController extends Controller
         $user = \App\Models\User::find($auth->id);
 
         foreach ($validate as $key => $value) {
+
+            if ($validate->$key == 'thumbnail') {
+                // $user->thumbnail = null;
+                $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
+            }
+            if ($validate->$key == 'password') {
+                $user->password = null;
+            }
+
+            if ($validate->$key == 'birthDate') {
+
+                $user->birthDate = date('Y-m-d', strtotime($validate->birthDate));
+            }
+
             $user->$key = $value;
         }
+
+
         try {
             $user->save();
 
