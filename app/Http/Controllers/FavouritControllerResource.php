@@ -39,7 +39,9 @@ class FavouritControllerResource extends Controller
         $fav->user_id = $user;
 
         try {
-            $fav->save();
+            if (!$fav::where(['product_id' => $validate->product_id, 'user_id' => $user])->exists()) {
+                $fav->save();
+            }
             return Resp::Success('تم بنجاح', $fav);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
