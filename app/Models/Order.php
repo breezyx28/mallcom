@@ -31,10 +31,10 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function setTotalPriceAttribute()
-    {
-        $total = $this->product->final_price * $this->attributes['amount'];
-        $this->attributes['total_price'] = $total;
-        return $total;
-    }
+    // public function setTotalPriceAttribute()
+    // {
+    //     $total = $this->product->final_price * $this->attributes['amount'];
+    //     $this->attributes['total_price'] = $total;
+    //     return $total;
+    // }
 }
