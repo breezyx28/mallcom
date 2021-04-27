@@ -59,11 +59,10 @@ class OrderController extends Controller
                 ->where('orders_number_id', $orders[0]->id)->get();
 
 
-            $invoiceInfo = \App\Models\invoice::where('orderNumber', $validate->orderNumber)->get();
+            $invoiceInfo = \App\Models\Invoice::where('orderNumber', $validate->orderNumber)->get();
 
             return Resp::Success('ok', ["orderInfo" => $res, "userInfo" => auth()->user(), "invoiceInfo" => $invoiceInfo]);
         } catch (\Throwable $th) {
-            return Resp::Success('test', $th->getMessage());
             //throw $th;
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
