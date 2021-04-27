@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\FavouritsRequest;
 use App\Models\Favourit;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class FavouritControllerResource extends Controller
@@ -75,11 +76,11 @@ class FavouritControllerResource extends Controller
      * @param  \App\Models\Favourit  $Favourit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favourit $Favourit)
+    public function destroy(Product $Favourit)
     {
         try {
             //code...
-            $Favourit->where(['user_id' => auth()->user()->id, 'id' => $Favourit->id])->delete();
+            \App\Models\Favourit::where(['user_id' => auth()->user()->id, 'product_id' => $Favourit->id])->delete();
         } catch (\Throwable $th) {
             //throw $th;
             return Resp::Error('حدث خطأ اثناء المسح', $th->getMessage());
