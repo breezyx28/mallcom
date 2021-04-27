@@ -12,7 +12,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    protected $with = ['account', 'state'];
+    protected $with = ['account', 'state', 'favourit'];
 
     public function state()
     {
@@ -29,6 +29,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Account::class, 'user_id', 'id');
     }
 
+    public function favourit()
+    {
+        return $this->hasMany(Favourit::class, 'user_id', 'id');
+    }
 
     public function getJWTIdentifier()
     {
