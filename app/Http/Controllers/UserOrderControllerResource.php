@@ -68,6 +68,7 @@ class UserOrderControllerResource extends Controller
         }
 
         $totals = [];
+        $actualTotals = [];
 
         foreach ($validate['orders'] as $key => $value) {
 
@@ -78,10 +79,12 @@ class UserOrderControllerResource extends Controller
             $validate['orders'][$key]['updated_at'] = Carbon::now();
 
             array_push($totals, ((\App\Models\Product::find($value['product_id'])->final_price) * $value['amount']));
+            array_push($actualTotals, ((\App\Models\Product::find($value['product_id'])->price) * $value['amount']));
         }
 
-        // find all products id
+        // find all products prices using there id's
         $totalPrice = collect($totals)->sum();
+        $actualTotalPrice = collect($actualTotals)->sum();
 
         // $totalPrice = $totals->sum('final_price');
 
@@ -89,7 +92,7 @@ class UserOrderControllerResource extends Controller
 
             $order->insert($validate['orders']);
 
-            $data = event(new InvoiceEvent($invoiceNumber, $orderNumber, $totalPrice, $accountNumber))[0]->original;
+            $data = event(new InvoiceEvent($invoiceNumber, $orderNumber, $totalPrice, $accountNumber, $actualTotalPrice))[0]->original;
 
             DB::commit();
             return Resp::Success('تم بنجاح', $data);
