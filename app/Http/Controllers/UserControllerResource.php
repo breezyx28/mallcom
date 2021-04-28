@@ -41,7 +41,8 @@ class UserControllerResource extends Controller
         foreach ($validate as $key => $value) {
 
             if ($validate->$key == 'thumbnail') {
-                $user->thumbnail = null;
+                // $user->thumbnail = null;
+                $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
             }
             if ($validate->$key == 'password') {
                 $user->password = Hash::make($validate->$key);
@@ -50,7 +51,6 @@ class UserControllerResource extends Controller
             $user->$key = $value;
         }
 
-        $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
 
         $user->role_id = 3;
 
