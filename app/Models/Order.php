@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $appends = 'total_price';
+    // protected $appends = 'total_price';
 
     public function orderNumber()
     {

@@ -13,14 +13,6 @@ use Illuminate\Validation\Rule;
 
 class UserOrderControllerResource extends Controller
 {
-
-    private $user;
-
-    public function __construct()
-    {
-        $this->user = auth()->user();
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -28,12 +20,12 @@ class UserOrderControllerResource extends Controller
      */
     public function index()
     {
-        $orders = DB::table('orders')
-            ->join('products', 'orders.product_id', '=', 'products.id')
-            ->join('states', 'orders.state_id', '=', 'states.id')
-            ->join('orders_numbers', 'orders.orders_number_id', '=', 'orders_numbers.id')
-            ->select('orders.*', 'products.*', 'states.name as stateName', 'states.city', 'orders_numbers.orderNumber')
-            ->where('orders.user_id', auth()->user()->id)
+        $orders = Order::with('state', 'product', 'orderNumber')
+            // ->join('products', 'orders.product_id', '=', 'products.id')
+            // ->join('states', 'orders.state_id', '=', 'states.id')
+            // ->join('orders_numbers', 'orders.orders_number_id', '=', 'orders_numbers.id')
+            // ->select('orders.*', 'products.*', 'states.name as stateName', 'states.city', 'orders_numbers.orderNumber')
+            ->where('user_id', auth()->user()->id)
             ->get();
         return Resp::Success('تم', $orders);
     }
