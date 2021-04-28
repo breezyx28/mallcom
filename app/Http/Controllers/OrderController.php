@@ -19,7 +19,7 @@ class OrderController extends Controller
     public function myOrders(Request $request)
     {
         $validate = $request->validate([
-            'status' => ['required', 'string|max:191', Rule::in(['accepted', 'rejected', 'delivered'])]
+            'status' => ['required', 'string|max:191', Rule::in(['available', 'accepted', 'rejected', 'delivered'])]
         ]);
 
         $orders = \App\Models\Order::with('product', 'state', 'orderNumber')
