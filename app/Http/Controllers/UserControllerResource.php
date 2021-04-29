@@ -44,6 +44,7 @@ class UserControllerResource extends Controller
                 // $user->thumbnail = null;
                 $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
             }
+
             if ($validate->$key == 'password') {
                 $user->password = Hash::make($validate->$key);
             }
@@ -98,9 +99,6 @@ class UserControllerResource extends Controller
             if ($validate->$key == 'thumbnail') {
                 // $user->thumbnail = null;
                 $User->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
-            }
-            if ($validate->$key == 'password') {
-                $User->password = null;
             }
 
             if ($validate->$key == 'birthDate') {
