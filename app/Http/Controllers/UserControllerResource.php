@@ -48,6 +48,11 @@ class UserControllerResource extends Controller
                 $user->password = Hash::make($validate->$key);
             }
 
+            if ($validate->$key == 'birthDate') {
+
+                $user->birthDate = date('Y-m-d', strtotime($validate->birthDate));
+            }
+
             $user->$key = $value;
         }
 
@@ -89,6 +94,20 @@ class UserControllerResource extends Controller
         $validate = (object) $request->validated();
 
         foreach ($validate as $key => $value) {
+
+            if ($validate->$key == 'thumbnail') {
+                // $user->thumbnail = null;
+                $User->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
+            }
+            if ($validate->$key == 'password') {
+                $User->password = null;
+            }
+
+            if ($validate->$key == 'birthDate') {
+
+                $User->birthDate = date('Y-m-d', strtotime($validate->birthDate));
+            }
+
             $User->$key = $value;
         }
 
