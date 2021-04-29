@@ -116,7 +116,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::get('getMyOrder', [OrderController::class, 'getMyOrder']);
 
         // user account
-        Route::apiResource('myAccount', UserAccountControllerResource::class);
+        Route::apiResource('accounts', UserAccountControllerResource::class);
 
         // user invoices
         Route::get('myInvoices', [InvoicesController::class, 'myInvoices']);

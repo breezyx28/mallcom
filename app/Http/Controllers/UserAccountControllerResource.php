@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\AccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserAccountControllerResource extends Controller
 {
@@ -73,6 +74,10 @@ class UserAccountControllerResource extends Controller
         $validate = (object) $request->validated();
 
         $acc = $account;
+
+        if (!Hash::check($validate->password, auth()->user()->password)) {
+            return Resp::Error('كلمة السر غير صحيحة');
+        }
 
         foreach ($validate as $key => $value) {
             if (isset($validate->password)) {
