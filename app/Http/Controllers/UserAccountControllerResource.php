@@ -72,9 +72,12 @@ class UserAccountControllerResource extends Controller
     {
         $validate = (object) $request->validated();
 
-        $acc = \App\Models\Account::find(auth()->user()->id);
+        $acc = $account;
 
         foreach ($validate as $key => $value) {
+            if (isset($validate->password)) {
+                unset($validate->password);
+            }
             $acc->$key = $value;
         }
 
