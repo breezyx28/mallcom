@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\AuthUser;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\ProductsRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -58,6 +59,19 @@ class ProductControllerResource extends Controller
         $validate = (object) $request->validated();
 
         $prod = new \App\Models\Product();
+
+        $role = new AuthUser();
+
+        if ($role->Role() == 1) {
+            $prod = $validate->price;
+            try {
+                $prod->save();
+                return Resp::Success('تم تحديث البيانات بنجاح');
+            } catch (\Throwable $th) {
+                return Resp::Error('حدث خطأ ما', $th->getMessage());
+            }
+            return 0;
+        }
 
         foreach ($validate as $key => $value) {
             $prod->$key = $value;

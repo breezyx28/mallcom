@@ -17,7 +17,11 @@ class FavouritControllerResource extends Controller
      */
     public function index()
     {
-        $fav = \App\Models\Favourit::with('product')->where('user_id', auth()->user()->id)->get();
+        $prod = new Product();
+        $fav = $prod::with('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes')->whereHas('favourit', function ($q) {
+            $q->where('user_id', auth()->user()->id);
+        })->get();
+
         return Resp::Success('تم بنجاح', $fav);
     }
 

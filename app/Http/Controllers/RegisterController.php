@@ -24,7 +24,7 @@ class RegisterController extends Controller
 
             if ($validate->$key == 'thumbnail') {
                 // $user->thumbnail = null;
-                $user->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Profile'));
+                $user->thumbnail = $request->file('thumbnail')->storePublicly('Profile');
             }
             if ($validate->$key == 'password') {
                 $user->password = null;

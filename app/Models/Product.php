@@ -40,6 +40,11 @@ class Product extends Model
         return $this->hasMany(ProductSizes::class, 'product_id', 'id');
     }
 
+    public function favourit()
+    {
+        return $this->hasMany(Favourit::class, 'product_id', 'id');
+    }
+
     public function getPhotoAttribute($value)
     {
         // replace http://localhost to by htpp://127.0.0.1
