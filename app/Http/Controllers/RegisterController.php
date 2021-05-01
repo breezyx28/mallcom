@@ -22,10 +22,6 @@ class RegisterController extends Controller
 
         foreach ($validate as $key => $value) {
 
-            if ($validate->$key == 'thumbnail') {
-                // $user->thumbnail = null;
-                $user->thumbnail = $request->file('thumbnail')->storePublicly('Profile');
-            }
             if ($validate->$key == 'password') {
                 $user->password = null;
             }
@@ -38,6 +34,10 @@ class RegisterController extends Controller
             $user->$key = $value;
         }
 
+        if (isset($validate->thumbnail)) {
+            // $user->thumbnail = null;
+            $user->thumbnail = $request->file('thumbnail')->storePublicly('Profile');
+        }
         $user->password = Hash::make($request->password);
         $user->role_id = 3;
 
