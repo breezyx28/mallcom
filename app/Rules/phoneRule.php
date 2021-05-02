@@ -26,7 +26,7 @@ class phoneRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        Str::length($value) == 10 && Str::startsWith($value, '0') ? true : false;
+        return Str::length($value) == 10 && Str::startsWith($value, '0') ? true : false;
     }
 
     /**

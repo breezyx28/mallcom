@@ -54,7 +54,7 @@ const ADMIN = 'v1/admin';
 // });
 
 Route::post(BASE . '/login', [LoginController::class, 'Login']);
-Route::post(BASE . '/accountCheck', [LoginController::class, 'accountCheck']);
+Route::post(GUEST . '/accountCheck', [LoginController::class, 'accountCheck']);
 Route::post(BASE . '/register', [RegisterController::class, 'register']);
 
 Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
@@ -63,7 +63,7 @@ Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
 Route::group(['prefix' => GUEST], function () {
     // verifications
     Route::apiResource('verify', VerificationControllerResource::class)->only('store');
-    Route::get('verifyAccount', [VerificationController::class, 'verifyAccount']);
+    Route::post('verifyAccount', [VerificationController::class, 'verifyAccount']);
 
     // products
     Route::ApiResource('products', ProductControllerResource::class)->only('index', 'show');

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseMessage as Resp;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth as JWTAuth;
 
 class VerificationController extends Controller
 {
     private $code, $phone;
     protected const api_key = 'bWFsbGNvbS5pdDIwMjFAZ21haWwuY29tOmVMVmwjMiZURlk=';
 
-    public function __construct($code)
+    public function __construct($code = 0)
     {
         $this->code = $code;
     }
@@ -44,8 +45,8 @@ class VerificationController extends Controller
             'action' => 'send-sms',
             'api_key' => self::api_key,
             'to' => $this->phone,
-            'from' => 'MallCom',
-            'sms' => "Code Verification $this->code",
+            'from' => 'mallcom',
+            'sms' => "$this->code رمز التأكيد",
         ]);
 
         $resp =  $http->json();
@@ -67,12 +68,26 @@ class VerificationController extends Controller
     {
         $validate = (object) $request->validate([
             'id' => 'required|integer',
-            'code' => 'required|numberic'
+            'verificationCode' => 'required|numeric'
         ]);
 
         try {
             //code...
-            \App\Models\Verification::where(['user_id' => $validate->id, 'code' => $validate->code])->update(['verified' => 1]);
+            \App\Models\Verification::where(['user_id' => $validate->id, 'code' => $validate->verificationCode])->update(['verified' => 1]);
+
+            $user = \App\Models\User::find($validate->id);
+            // $token = JWTAuth::fromUser($user);
+
+            $token = JWTAuth::login($user);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'تم بنجاح',
+                'data' => $user,
+                'token' => $token,
+            ], 200);
+
+            return Resp::Success('تم تاكيد الحساب بنجاح',);
         } catch (\Throwable $th) {
             //throw $th;
             return Resp::Error('Error while verifying', $th->getMessage());

@@ -149,41 +149,63 @@ class LoginController extends Controller
             return false;
         });
 
-        // check user verification on verification Model
-        $verification = \App\Models\Verification::where(['user_id' => $check['id']])->get();
-
         // if user exists
-        if (count($verification) > 0) {
-            $user = \App\Models\User::find($verification['user_id']);
+        if ($check) {
+            // check user verification on verification Model
+            $verification = \App\Models\Verification::where(['user_id' => $check['id']])->firstOr(function () {
+                return false;
+            });
+
+            $user = \App\Models\User::find($check['id']);
+
+            // if user exists but not exists on verification model
+            if (!$verification) {
+                DB::beginTransaction();
+                try {
+                    //code...
+                    event(new NotificationEvent($user->id, 'verify'));
+                    event(new sendVerificationEvent($user));
+                    DB::commit();
+                    return Resp::Success('تم ارسال رسالة التأكيد بنجاح');
+                } catch (\Throwable $th) {
+                    //throw $th;
+                    DB::rollback();
+                    return Resp::Error('حدث خطا ما اثناء ارسال رسالة التاكيد ... الرجاء المحاولة مرة أخرى');
+                }
+            }
 
             $code = rand(100000, 999999);
             $sms = new SMS($code);
 
             // if user exists and verified
-            if ($verification['verified']) {
-                // send sms first
-                $sms->sendCode($check['phone']);
+            if ($verification->verified) {
 
                 // send verification code and update code in Verifi... Model
                 try {
-                    $verf = \App\Models\Verification::find($verification['id']);
+                    // send sms first
+                    $sms->sendCode($check['phone']);
+                    $verf = \App\Models\Verification::find($verification->id);
                     $verf->code = $code;
                     $verf->save();
+
+                    return Resp::Success('تم التاكد بنجاح', $user->get('id as userID'));
                 } catch (\Exception $e) {
-                    return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة لاحقا');
+                    return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة لاحقا', $e->getMessage());
                 }
             } else {
                 // send verification code and update code in Verifi... Model
                 try {
-                    $verf = \App\Models\Verification::find($verification['id']);
+                    $verf = \App\Models\Verification::find($verification->id);
                     $verf->code = $code;
                     $verf->save();
 
                     // send sms first
                     $sms->sendCode($check['phone']);
                     $user->notify(new VerifiyAccount($user->id, $code));
+
+                    return Resp::Success('تم التأكد بنجاح ... قم بتأكيد حسابك أولا', $user->get('id as userID'));
                 } catch (\Exception $e) {
-                    return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة مرة أخرى');
+                    return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة مرة أخرى', $e->getMessage());
                 }
             }
         } else {
