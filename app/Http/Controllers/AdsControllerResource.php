@@ -69,14 +69,15 @@ class AdsControllerResource extends Controller
      */
     public function update(UpdateAdRequest $request, Ad $ad)
     {
-        $validate = (object) $request->validated();
+        $validate = $request->validated();
 
         foreach ($validate as $key => $value) {
-            $ad->$key = $value;
-        }
 
-        if (isset($ad->photo)) {
-            $ad->photo = Str::of($request->file('photo')->storePublicly('Ads'));
+            if ($ad->$key == 'photo') {
+                $ad->photo = Str::of($request->file('photo')->storePublicly('Ads'));
+            }
+
+            $ad->$key = $value;
         }
 
         try {

@@ -64,6 +64,9 @@ Route::group(['prefix' => GUEST], function () {
     // verifications
     Route::post('verifyAccount', [VerificationController::class, 'verifyAccount']);
 
+    // get categories and sub categories
+    // Route::get('getCategories',[])
+
     // products
     Route::ApiResource('products', ProductControllerResource::class)->only('index', 'show');
     Route::get('top', [ProductController::class, 'topProduct']);

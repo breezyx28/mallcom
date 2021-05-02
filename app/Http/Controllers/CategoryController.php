@@ -19,4 +19,8 @@ class CategoryController extends Controller
 
         return Resp::Success('ok', $data);
     }
+
+    public function getCategories()
+    {
+    }
 }
