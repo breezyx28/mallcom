@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\updateUsersRequest;
+use App\Rules\phoneRule;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth as JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Controllers\VerificationController as SMS;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Events\sendVerificationEvent;
+use App\Notifications\VerifiyAccount;
 
 class LoginController extends Controller
 {
@@ -132,5 +136,59 @@ class LoginController extends Controller
             'expires_in' => JWTAuth::factory()->getTTL() * 3600,
             'user' => auth()->user()
         ]);
+    }
+
+    public function accountCheck(Request $request)
+    {
+        $validated = (object) $request->validate(([
+            'phoneNumber' => ['required', 'numeric', new phoneRule()]
+        ]));
+
+        // check for the phoneNummber in DB
+        $check  = \App\Models\User::where('phone', $validated->phoneNumber)->firstOr(function () {
+            return false;
+        });
+
+        // check user verification on verification Model
+        $verification = \App\Models\Verification::where(['user_id' => $check['id']])->get();
+
+        // if user exists
+        if (count($verification) > 0) {
+            $user = \App\Models\User::find($verification['user_id']);
+
+            $code = rand(100000, 999999);
+            $sms = new SMS($code);
+
+            // if user exists and verified
+            if ($verification['verified']) {
+                // send sms first
+                $sms->sendCode($check['phone']);
+
+                // send verification code and update code in Verifi... Model
+                try {
+                    $verf = \App\Models\Verification::find($verification['id']);
+                    $verf->code = $code;
+                    $verf->save();
+                } catch (\Exception $e) {
+                    return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة لاحقا');
+                }
+            } else {
+                // send verification code and update code in Verifi... Model
+                try {
+                    $verf = \App\Models\Verification::find($verification['id']);
+                    $verf->code = $code;
+                    $verf->save();
+
+                    // send sms first
+                    $sms->sendCode($check['phone']);
+                    $user->notify(new VerifiyAccount($user->id, $code));
+                } catch (\Exception $e) {
+                    return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة مرة أخرى');
+                }
+            }
+        } else {
+
+            return Resp::Error('المستخدم غير موجود');
+        }
     }
 }

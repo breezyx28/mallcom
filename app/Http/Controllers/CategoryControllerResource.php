@@ -79,8 +79,12 @@ class CategoryControllerResource extends Controller
             $cat->$key = $value;
         }
 
-        $cat->sub_img = Str::of($request->file('sub_img')->storePublicly('Category'));
-        $cat->cat_img = Str::of($request->file('cat_img')->storePublicly('Category'));
+        if (isset($validate->sub_img)) {
+            $cat->sub_img = Str::of($request->file('sub_img')->storePublicly('Category'));
+        }
+        if (isset($validate->cat_img)) {
+            $cat->cat_img = Str::of($request->file('cat_img')->storePublicly('Category'));
+        }
 
         try {
             $cat->save();

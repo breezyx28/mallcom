@@ -56,6 +56,7 @@ class AdsControllerResource extends Controller
      */
     public function show(Ad $ad)
     {
+        $ad->load('product', 'category');
         return Resp::Success('تم', $ad);
     }
 

@@ -54,6 +54,7 @@ const ADMIN = 'v1/admin';
 // });
 
 Route::post(BASE . '/login', [LoginController::class, 'Login']);
+Route::post(BASE . '/accountCheck', [LoginController::class, 'accountCheck']);
 Route::post(BASE . '/register', [RegisterController::class, 'register']);
 
 Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
@@ -100,6 +101,7 @@ Route::group(['prefix' => GUEST], function () {
 Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::group(['prefix' => BASE, 'middleware' => 'userWare'], function () {
+
 
         // user personal
         Route::get('profile', [LoginController::class, 'profile']);
