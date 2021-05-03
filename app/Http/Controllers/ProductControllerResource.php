@@ -60,12 +60,15 @@ class ProductControllerResource extends Controller
 
         $prod = new \App\Models\Product();
 
-        $role = new AuthUser();
+        if (auth()->user()->role_id == 1) {
 
-        if ($role->Role() == 1) {
-            $prod = $validate->price;
+            if (!isset($validate->price)) {
+                return Resp::Error('السعر مطلوب', 'السعر مطلوب');
+            }
+            $Product->price = $validate->price;
+
             try {
-                $prod->save();
+                $Product->save();
                 return Resp::Success('تم تحديث البيانات بنجاح');
             } catch (\Throwable $th) {
                 return Resp::Error('حدث خطأ ما', $th->getMessage());
@@ -74,10 +77,12 @@ class ProductControllerResource extends Controller
         }
 
         foreach ($validate as $key => $value) {
+            if ($validate->$key == 'photo') {
+                $prod->photo = Str::of($request->file('photo')->storePublicly('Product'));
+            }
             $prod->$key = $value;
         }
 
-        $prod->photo = Str::of($request->file('photo')->storePublicly('Product'));
 
         try {
             $prod->save();

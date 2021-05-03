@@ -17,7 +17,7 @@ class AccountsControllerResource extends Controller
      */
     public function index()
     {
-        $acc = \App\Models\Account::with('user')->get();
+        $acc = \App\Models\Account::all();
         return Resp::Success('تم بنجاح', $acc);
     }
 

@@ -11,6 +11,6 @@ class Account extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
 }

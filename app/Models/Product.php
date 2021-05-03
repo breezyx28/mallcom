@@ -57,7 +57,7 @@ class Product extends Model
 
     public function getFinalPriceAttribute()
     {
-        $price = $this->attributes['price'];
+        $price = @$this->attributes['price'];
         $addPrice = 0;
         $discount = 0;
 
