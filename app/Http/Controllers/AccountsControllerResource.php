@@ -50,7 +50,7 @@ class AccountsControllerResource extends Controller
      */
     public function show(Account $account)
     {
-        return Resp::Success('تم بنجاح', $account::with('user'));
+        return Resp::Success('تم بنجاح', $account);
     }
 
     /**

@@ -12,7 +12,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    protected $with = ['account', 'state', 'favourit'];
+    protected $with = ['account', 'state', 'favourit', 'role'];
 
     public function state()
     {

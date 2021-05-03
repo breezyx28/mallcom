@@ -69,7 +69,7 @@ class ProductControllerResource extends Controller
 
             try {
                 $Product->save();
-                return Resp::Success('تم تحديث البيانات بنجاح');
+                return Resp::Success('تم تحديث البيانات بنجاح', $Product);
             } catch (\Throwable $th) {
                 return Resp::Error('حدث خطأ ما', $th->getMessage());
             }

@@ -168,7 +168,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::ApiResource('productSizes', ProductSizesControllerResource::class);
 
         // accounts
-        Route::resource('accounts', AccountsControllerResource::class)->only('index');
+        Route::resource('accounts', AccountsControllerResource::class)->only('index', 'show');
 
         // invoices
         Route::ApiResource('invoices', InvoiceControllerResource::class)->only('index');
