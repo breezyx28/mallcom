@@ -67,9 +67,9 @@ class ProductsPhotoControllerResource extends Controller
      * @param  \App\Models\ProductsPhoto  $ProductsPhoto
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductsPhoto $ProductsPhoto)
+    public function show(ProductsPhoto $productsPhoto)
     {
-        return Resp::Success('تم', $ProductsPhoto);
+        return Resp::Success('تم', $productsPhoto);
     }
 
     /**
@@ -87,7 +87,7 @@ class ProductsPhotoControllerResource extends Controller
 
         try {
             $ProductsPhoto->save();
-            return Resp::Success('تم بنجاح', $ProductsPhoto);
+            return Resp::Success('تم التحديث بنجاح', $ProductsPhoto);
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
@@ -99,9 +99,9 @@ class ProductsPhotoControllerResource extends Controller
      * @param  \App\Models\ProductsPhoto  $ProductsPhoto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductsPhoto $ProductsPhoto)
+    public function destroy(ProductsPhoto $productsPhoto)
     {
-        $ProductsPhoto->delete();
-        return Resp::Success('تم الحذف', $ProductsPhoto);
+        $productsPhoto->delete();
+        return Resp::Success('تم الحذف', $productsPhoto);
     }
 }

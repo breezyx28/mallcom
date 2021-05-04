@@ -35,10 +35,13 @@ class StoreControllerResource extends Controller
         $store = new \App\Models\Store();
 
         foreach ($validate as $key => $value) {
+
             $store->$key = $value;
         }
 
-        $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
+        if (isset($validate->thumbnail)) {
+            $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
+        }
 
         try {
             $store->save();
@@ -70,17 +73,17 @@ class StoreControllerResource extends Controller
     {
         $validate = (object) $request->validated();
 
-        $store = new \App\Models\Store();
-
         foreach ($validate as $key => $value) {
-            $store->$key = $value;
+            $Store->$key = $value;
         }
 
-        $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
+        if (isset($validate->thumbnail)) {
+            $Store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
+        }
 
         try {
-            $store->save();
-            return Resp::Success('تم بنجاح', $store);
+            $Store->save();
+            return Resp::Success('تم التحديث بنجاح', $Store);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
         }
@@ -94,11 +97,7 @@ class StoreControllerResource extends Controller
      */
     public function destroy(Store $Store)
     {
-        try {
-            $Store->delete();
-        } catch (\Exception $e) {
-
-            return Resp::Success('تم الحذف بنجاح', $e);
-        }
+        $Store->delete();
+        return Resp::Success('تم الحذف بنجاح', $Store);
     }
 }

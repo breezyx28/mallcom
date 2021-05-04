@@ -41,4 +41,15 @@ class ProductsPhotosRequest extends FormRequest
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
     }
+
+    public function messages()
+    {
+        return [
+            'photo.required' => 'حقل الصور مطلوب',
+            'photo.*.image' => 'الصورة يجب ان تكون من النوع صورة',
+            'product_id.required' => 'حقل رقم المنتج مطلوب',
+            'product_id.integer' => 'حقل رقم المنتج يجب ان يكون من النوع رقم',
+            'product_id.exists' => 'رقم المنتج غير موجود',
+        ];
+    }
 }

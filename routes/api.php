@@ -153,7 +153,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::apiResource('users', UserControllerResource::class);
 
         // stores
-        Route::ApiResource('stores', StoreControllerResource::class);
+        Route::ApiResource('stores', StoreControllerResource::class)->except('update');
+        Route::post('store/{store}', [StoreControllerResource::class, 'update']);
 
         // products
         Route::ApiResource('products', ProductControllerResource::class)->except('store');
@@ -162,7 +163,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::ApiResource('additionalDescription', AdditionalDescriptionControllerResource::class);
 
         // products photos
-        Route::ApiResource('productsPhotos', ProductsPhotoControllerResource::class);
+        Route::ApiResource('productsPhotos', ProductsPhotoControllerResource::class)->except('update');
+        Route::post('productPhoto/{ProductsPhoto}', [ProductsPhotoControllerResource::class, 'update']);
 
         // products sizes
         Route::ApiResource('productSizes', ProductSizesControllerResource::class);
@@ -171,7 +173,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::resource('accounts', AccountsControllerResource::class)->only('index', 'show');
 
         // invoices
-        Route::ApiResource('invoices', InvoiceControllerResource::class)->only('index');
+        Route::ApiResource('invoices', InvoiceControllerResource::class)->only('index', 'show');
 
         // orders
         Route::apiResource('orders', OrderControllerResource::class)->except('destroy', 'store');

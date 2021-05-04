@@ -45,4 +45,20 @@ class UpdateStoreRequest extends FormRequest
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
     }
+
+    public function messages()
+    {
+        return [
+            'name.string' => 'حقل اسم المتجر يجب ان يكون من النوع نص',
+            'thumbnail.image' => 'حقل صورة المتجر يجب ان تكون من النوع صورة',
+            'thumbnail.mimes' => 'حقل صورة المتجر يجب انت تكون ضمن jpg,jpeg,png',
+            'phone.unique' => 'هاتف المتجر مستخدم مسبقا',
+            'phone.digits' => 'حقل هاتف المتجر يجب ان يكون من النوع ارقام',
+            'address.string' => 'حقل عنوان المتجر يجب ان يكون من النوع نص',
+            'user_id.exists' => 'حقل رقم مستخدم المتجر غير متوفر في السجلات',
+            'user_id.integer' => 'حقل رقم مستخدم المتجر يجب ان يكون من النوع رقم صحيح',
+            'bio.string' => 'حقل معلومات المتجر يجب ان يكون من النوع نص',
+            'activity.boolean' => 'حقل إلغاء نشاط المتجر يجب ان يكون من النوع قيمة منطقية',
+        ];
+    }
 }

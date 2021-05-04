@@ -42,4 +42,18 @@ class StatesRequest extends FormRequest
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'حقل اسم الولاية مطلوب',
+            'name.string' => 'حقل الولاية يجب ان يكون نصي',
+            'city.required' => 'حقل المدينة مطلوب',
+            'city.string' => 'حقل المدينة يجب ان يكون نصي',
+            'deliverTime.required' => 'حقل الزمن التوصيل مطلوب',
+            'deliverTime.integer' => 'حقل زمن التوصيل يجب ان يكون رقمي',
+            'deliverPrice.required' => 'حقل سعر التوصيل مطلوب',
+            'deliverPrice.integer' => 'حقل سعر التوصيل يجب ان يكون رقمي',
+        ];
+    }
 }

@@ -39,4 +39,13 @@ class UpdateProductPhotosRequest extends FormRequest
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
     }
+
+    public function messages()
+    {
+        return [
+            'photo.required' => 'حقل الصورة مطلوب',
+            'photo.image' => 'حقل الصورة يجب ان يكون من النوع صورة',
+            'photo.mimes' => 'الصورة يجب ان تكون من احد الأنواع jpg, jpeg , png',
+        ];
+    }
 }
