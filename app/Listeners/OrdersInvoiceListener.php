@@ -31,7 +31,7 @@ class OrdersInvoiceListener
 
         $invoice->invoiceNumber = $event->invoiceNumber;
         $invoice->orderNumber = $event->orderNumber;
-        $invoice->discount = ($event->totalPrice / $event->actualTotalPrice) * 100;
+        $invoice->discount = 100 - ((($event->totalPrice) / ($event->actualTotalPrice)) * 100);
         $invoice->total = $event->totalPrice;
         $invoice->user_id = $user->id;
         $invoice->account_id = $event->accountNumber;
