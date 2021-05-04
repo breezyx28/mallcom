@@ -35,6 +35,7 @@ class OrdersInvoiceListener
         $invoice->total = $event->totalPrice;
         $invoice->user_id = $user->id;
         $invoice->account_id = $event->accountNumber;
+        $invoice->payment_method = $event->payment_method;
 
         try {
             $invoice->save();

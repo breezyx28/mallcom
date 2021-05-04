@@ -31,8 +31,10 @@ class OrdersRequest extends FormRequest
     {
         return [
             'orders' => 'required|array',
-            'account_id' => 'required|exists:accounts,id',
-            'orders.*.state_id' => 'required|integer|exists:states,id',
+            'account_id' => 'exists:accounts,id',
+            'payment_method' => ['required', Rule::in(['cash', 'credit', 'bok'])],
+            'orders.*.state_id' => 'integer|exists:states,id',
+            'orders.*.order_address' => 'required|max:191',
             'orders.*.product_id' => 'required|integer|exists:products,id',
             'orders.*.amount' => 'required|integer|min:1',
         ];

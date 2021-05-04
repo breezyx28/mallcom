@@ -46,7 +46,8 @@ class UserOrderControllerResource extends Controller
         // generate uuid for order
         $orderNumber = (strtotime("now")) . (@DB::table('orders_numbers')->orderBy('id', 'DESC')->first()->id + 1);
         $invoiceNumber = (strtotime("now")) . (@DB::table('invoices')->orderBy('id', 'DESC')->first()->id + 1);
-        $accountNumber = $validate['account_id'];
+        $accountNumber = isset($validate['account_id']) ? $validate['account_id'] : null;
+        $payment_method = $validate['payment_method'];
 
         $ordersNumber = new \App\Models\OrdersNumber();
         $order = new \App\Models\Order();
@@ -84,7 +85,7 @@ class UserOrderControllerResource extends Controller
 
             $order->insert($validate['orders']);
 
-            $data = event(new InvoiceEvent($invoiceNumber, $orderNumber, $totalPrice, $accountNumber, $actualTotalPrice))[0]->original;
+            $data = event(new InvoiceEvent($invoiceNumber, $orderNumber, $totalPrice, $accountNumber, $actualTotalPrice, $payment_method))[0]->original;
 
             DB::commit();
             return Resp::Success('تم بنجاح', $data);
