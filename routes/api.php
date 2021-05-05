@@ -147,7 +147,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
 
         // statistics
-        Route::get(BASE . '/statistics', [StatisticsController::class, 'statistics']);
+        Route::get('statistics', [StatisticsController::class, 'statistics']);
 
         // users
         Route::apiResource('users', UserControllerResource::class);
@@ -188,7 +188,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::apiResource('sizes', SizesControllerResource::class);
 
         // materials
-        Route::apiResource('materilas', MaterialControllerResource::class);
+        Route::apiResource('materials', MaterialControllerResource::class);
 
         // roles
         Route::apiResource('roles', RoleControllerResource::class);

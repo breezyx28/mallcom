@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseMessage as Resp;
 use App\Models\Order;
 use Illuminate\Http\Request;
-use UpdateOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 
 class OrderControllerResource extends Controller
 {
@@ -39,8 +39,8 @@ class OrderControllerResource extends Controller
      */
     public function show(Order $Order)
     {
-        $orders = $Order::with('user', 'product', 'orderNumber', 'state')->get();
-        return Resp::Success('تم', $orders);
+        $data = $Order->load('user', 'product', 'orderNumber', 'state');
+        return Resp::Success('تم', $data);
     }
 
     /**

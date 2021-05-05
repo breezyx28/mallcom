@@ -17,7 +17,7 @@ class MaterialControllerResource extends Controller
      */
     public function index()
     {
-        $all = Material::with('category')->all();
+        $all = Material::with('category')->get();
         return Resp::Success('تم', $all);
     }
 
@@ -53,7 +53,8 @@ class MaterialControllerResource extends Controller
      */
     public function show(Material $Material)
     {
-        return Resp::Success('تم', $Material);
+        $mat = $Material->load('category');
+        return Resp::Success('تم', $mat);
     }
 
     /**
@@ -67,9 +68,7 @@ class MaterialControllerResource extends Controller
     {
         $validate = (object) $request->validated();
 
-        foreach ($validate as $key => $value) {
-            $Material->$key = $value;
-        }
+        $Material->materialName = $validate->materialName;
 
         try {
             $Material->save();

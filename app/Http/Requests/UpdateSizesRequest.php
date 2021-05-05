@@ -15,7 +15,7 @@ class UpdateSizesRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -28,7 +28,7 @@ class UpdateSizesRequest extends FormRequest
         return [
             'unit' => 'string|max:191',
             'size' => 'string|max:191',
-            'measureType' => 'string|max:3',
+            'measureType' => 'string|max:4',
         ];
     }
 
@@ -40,5 +40,17 @@ class UpdateSizesRequest extends FormRequest
             $messages[] = $message;
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    }
+
+    public function messages()
+    {
+        return [
+            'unit.string' => 'حقل وحدة القياس يجب ان يكون نص',
+            'unit.max' => 'حقل وحدة القياس تجاوز الطول المسموح به',
+            'size.string' => 'حقل المقاس يجب ان يكون نص',
+            'size.max' => 'حقل المقاس تجاوز الطول المسموح به',
+            'measureType.string' => 'حقل نوع المقاس يجب ان يكون نص',
+            'measureType.max' => 'حقل المقاس تجاوز الطول المسموح به وهو ال4',
+        ];
     }
 }

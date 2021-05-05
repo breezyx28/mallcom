@@ -34,7 +34,8 @@ class LoginController extends Controller
             return Resp::Error('خطأ في كلمة السر او رقم الهاتف');
         }
 
-        $user = auth()->user();
+        $auth = auth()->user();
+        $user = \App\Models\User::where('id', $auth->id)->with('favourit')->get();
 
         return response()->json([
             'success' => true,
@@ -46,7 +47,8 @@ class LoginController extends Controller
 
     public function profile()
     {
-        return Resp::Success('تم', auth()->user());
+        $user = auth()->user()->id;
+        return Resp::Success('تم', $user::where('id', $user)->with('favourit')->get());
     }
 
     public function updateProfile(updateUsersRequest $request)

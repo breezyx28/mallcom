@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class UpdateRoleRequest extends FormRequest
 {
@@ -15,7 +16,10 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if (auth()->user()->role_id == 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -26,8 +30,8 @@ class UpdateRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'roleCode' => 'integer|unique:roles|integer|digit:1|between:0,5',
-            'position' => 'string|max:191'
+            'roleCode' => 'integer|unique:roles|digits:1|between:0,3',
+            'position' => [Rule::in(['admin', 'store', 'user']), 'unique:roles', 'string', 'max:100']
         ];
     }
 
@@ -39,5 +43,19 @@ class UpdateRoleRequest extends FormRequest
             $messages[] = $message;
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    }
+
+    public function messages()
+    {
+        return [
+            'roleCode.unique' => 'حقل رقم الصلاحية مستخدم',
+            'roleCode.integer' => 'حقل رقم الصلاحية يجب ان يكون رقم صحيح',
+            'roleCode.digits' => 'حقل رقم الصلاحية يجب ان لا يتجاوز خانة رقمية واحدة',
+            'roleCode.between' => 'حقل رقم الصلاحية يجب ان يكون بين ال0 و ال3',
+            'position.unique' => 'حقل الوظيفة مستخدم مسبقا',
+            'position.string' => 'حقل الوظيفة يجب ان يكون نص',
+            'position.max' => 'حقل الوظيفة تجاوز الطول النصي المصرح به',
+            'position.in' => 'حقل الوظيفة يجب ان يكون ضمن ال user, admin, store',
+        ];
     }
 }

@@ -26,7 +26,7 @@ class UpdateMaterialsRequest extends FormRequest
     public function rules()
     {
         return [
-            'materialName' => 'string|max:191'
+            'materialName' => 'required|string|max:191'
         ];
     }
 
@@ -38,5 +38,13 @@ class UpdateMaterialsRequest extends FormRequest
             $messages[] = $message;
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    }
+
+    public function messages()
+    {
+        return [
+            'materialName.required' => 'حقل اسم الخامة مطلوب',
+            'materialName.string' => 'حقل اسم الخامة يجب ان يكون من النوع نص',
+        ];
     }
 }

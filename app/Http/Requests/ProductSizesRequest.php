@@ -42,4 +42,18 @@ class ProductSizesRequest extends FormRequest
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
     }
+
+    public function messages()
+    {
+        return [
+            'product_id.required' => 'حقل رقم المنتج المرجعي مطلوب',
+            'product_id.exists' => 'حقل رقم المنتج المرجعي غير موجود في السجلات',
+            'sizes_array.required' => 'حقل مصفوفة المقاسات مطلوب',
+            'sizes_array.array' => 'حقل مصفوفة المقاسات يجب ان يكون من النوع مصفوفة',
+            'sizes_array.*.size.required' => 'حقل المقاس مطلوب',
+            'sizes_array.*.size.string' => 'حقل المقاس يجب ان يكون نص',
+            'sizes_array.*.unit.required' => 'حقل الوحدة مطلوب',
+            'sizes_array.*.unit.string' => 'حقل الوحدة يجب ان يكون نص',
+        ];
+    }
 }

@@ -17,7 +17,7 @@ class AdditionalDescriptionControllerResource extends Controller
      */
     public function index()
     {
-        $all = AdditionalDescription::with('product')->all();
+        $all = AdditionalDescription::with('product')->get();
         return Resp::Success('تم', $all);
     }
 
@@ -33,6 +33,11 @@ class AdditionalDescriptionControllerResource extends Controller
         $addDesc =  new AdditionalDescription();
 
         foreach ($validate as $key => $value) {
+            if ($validate->$key == 'expireDate') {
+
+                $addDesc->expireDate = date('Y-m-d', strtotime($validate->expireDate));
+            }
+
             $addDesc->$key = $value;
         }
 
@@ -53,7 +58,8 @@ class AdditionalDescriptionControllerResource extends Controller
      */
     public function show(AdditionalDescription $additionalDescription)
     {
-        return Resp::Success('تم', $additionalDescription);
+        $data = $additionalDescription->load('product');
+        return Resp::Success('تم', $data);
     }
 
     /**
@@ -65,9 +71,15 @@ class AdditionalDescriptionControllerResource extends Controller
      */
     public function update(UpdateAdditionalDescriptionRequest $request, AdditionalDescription $additionalDescription)
     {
-        $validate = $request->validated();
+        $validate = (object) $request->validated();
 
         foreach ($validate as $key => $value) {
+
+            if ($validate->$key == 'expireDate') {
+
+                $additionalDescription->expireDate = date('Y-m-d', strtotime($validate->expireDate));
+            }
+
             $additionalDescription->$key = $value;
         }
 

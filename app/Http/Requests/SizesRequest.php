@@ -28,7 +28,7 @@ class SizesRequest extends FormRequest
         return [
             'unit' => 'required|string|max:191',
             'size' => 'required|string|max:191',
-            'measureType' => 'required|string|max:3',
+            'measureType' => 'required|string|max:4',
             'category_id' => 'required|exists:categories,id|integer'
         ];
     }
@@ -41,5 +41,23 @@ class SizesRequest extends FormRequest
             $messages[] = $message;
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    }
+
+    public function messages()
+    {
+        return [
+            'unit.required' => 'حقل وحدة القياس مطلوب',
+            'unit.string' => 'حقل وحدة القياس يجب ان يكون نص',
+            'unit.max' => 'حقل وحدة القياس تجاوز الطول المسموح به',
+            'size.required' => 'حقل المقاس مطلوب',
+            'size.string' => 'حقل المقاس يجب ان يكون نص',
+            'size.max' => 'حقل المقاس تجاوز الطول المسموح به',
+            'measureType.required' => 'حقل نوع المقاس مطلوب',
+            'measureType.string' => 'حقل نوع المقاس يجب ان يكون نص',
+            'measureType.max' => 'حقل المقاس تجاوز الطول المسموح به وهو ال4',
+            'category_id.required' => 'حقل رقم الصنف المرجعي مطلوب',
+            'category_id.exists' => 'حقل رقم الصنف المرجعي غير موجود في السجلات',
+            'category_id.integer' => 'حقل رقم الصنف المرجعي يجب ان يكون رقم صحيح',
+        ];
     }
 }

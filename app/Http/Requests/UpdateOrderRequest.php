@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Http\Requests;
+
+use App\Helper\ResponseMessage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -7,17 +10,13 @@ use Illuminate\Validation\Rule;
 
 class UpdateOrderRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        if (auth()->user()->role_id == 3) {
+        if (auth()->user()->role_id == 1) {
             return true;
         }
-        return false;
+
+        return ResponseMessage::Error('غير مصرح', auth()->user()->role->position);
     }
 
     /**
@@ -28,7 +27,7 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => ['required', 'string|max:191', Rule::in(['accepted', 'delivered', 'rejected'])],
+            'status' => ['required', 'string', 'max:191', Rule::in(['accepted', 'delivered', 'rejected', 'available'])],
         ];
     }
 
@@ -40,5 +39,14 @@ class UpdateOrderRequest extends FormRequest
             $messages[] = $message;
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    }
+
+    public function messages()
+    {
+        return [
+            'status.required' => 'حقل حالة الطلب مطلوب',
+            'status.string' => 'حقل حالة الطلب يجب ان يكون نص',
+            'status.in' => 'حقل حالة الطلب يجب ان يتضمن accepted, delivered, rejected or available',
+        ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\ProductSizesRequest;
+use App\Http\Requests\UpdateProductSizeRequest;
 use App\Models\ProductSizes;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,8 @@ class ProductSizesControllerResource extends Controller
      */
     public function index()
     {
-        //
+        $all = ProductSizes::with('product')->get();
+        return Resp::Success('تم', $all);
     }
 
     /**
@@ -33,9 +35,6 @@ class ProductSizesControllerResource extends Controller
         $prodSizes = new \App\Models\ProductSizes();
 
         foreach ($validate as $key => $value) {
-            // if ($validate->sizes_array) {
-            //     $validate->sizes_array = json_encode($validate->sizes_array);
-            // }
             $prodSizes->$key = $value;
         }
 
@@ -53,9 +52,10 @@ class ProductSizesControllerResource extends Controller
      * @param  \App\Models\ProductSizes  $productSizes
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductSizes $productSizes)
+    public function show(ProductSizes $productSize)
     {
-        //
+        $productSize->load('product');
+        return Resp::Success('تم', $productSize);
     }
 
     /**
@@ -65,9 +65,20 @@ class ProductSizesControllerResource extends Controller
      * @param  \App\Models\ProductSizes  $productSizes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductSizes $productSizes)
+    public function update(UpdateProductSizeRequest $request, ProductSizes $productSize)
     {
-        //
+        $validate = (object) $request->validated();
+
+        foreach ($validate as $key => $value) {
+            $productSize->$key = $value;
+        }
+
+        try {
+            $productSize->save();
+            return Resp::Success('تم التحديث', $productSize);
+        } catch (\Exception $e) {
+            return Resp::Error('حدث خطأ ما', $e->getMessage());
+        }
     }
 
     /**
@@ -76,8 +87,9 @@ class ProductSizesControllerResource extends Controller
      * @param  \App\Models\ProductSizes  $productSizes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductSizes $productSizes)
+    public function destroy(ProductSizes $productSize)
     {
-        //
+        $productSize->delete();
+        return Resp::Success('تم الحذف', $productSize);
     }
 }

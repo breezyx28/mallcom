@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class MaterialsRequest extends FormRequest
+class UpdateProductSizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,16 +18,13 @@ class MaterialsRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
         return [
-            'materialName' => 'required|string|max:191',
-            'category_id' => 'required|exists:categories,id'
+            'sizes_array' => 'required|array',
+            'sizes_array.*.size' => 'required|string',
+            'sizes_array.*.unit' => 'required|string',
         ];
     }
 
@@ -44,11 +41,12 @@ class MaterialsRequest extends FormRequest
     public function messages()
     {
         return [
-            'materialName.required' => 'حقل اسم الخامة مطلوب',
-            'materialName.string' => 'حقل اسم الخامة يجب ان يكون من النوع نص',
-            'materialName.max' => 'حقل الخامة تعدى الطول المسموح',
-            'category_id.required' => 'حقل رقم الصنف المرجع مطلوب',
-            'category_id.exists' => 'حقل رقم الصنف المرجعي غير موجود  في السجلات',
+            'sizes_array.required' => 'حقل مصفوفة المقاسات مطلوب',
+            'sizes_array.array' => 'حقل مصفوفة المقاسات يجب ان يكون من النوع مصفوفة',
+            'sizes_array.*.size.string' => 'حقل المقاس يجب ان يكون نص',
+            'sizes_array.*.unit.string' => 'حقل الوحدة يجب ان يكون نص',
+            'sizes_array.*.size.required' => 'حقل المقاس مطلوب',
+            'sizes_array.*.unit.required' => 'حقل الوحدة مطلوب',
         ];
     }
 }
