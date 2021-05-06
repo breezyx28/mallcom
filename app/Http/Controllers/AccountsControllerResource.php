@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Helper\ResponseMessage as Resp;
 use App\Http\Requests\AccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
+use Illuminate\Support\Facades\Hash;
 
 class AccountsControllerResource extends Controller
 {
@@ -29,6 +30,7 @@ class AccountsControllerResource extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -39,7 +41,23 @@ class AccountsControllerResource extends Controller
      */
     public function store(AccountRequest $request)
     {
-        //
+        $auth = auth()->user();
+
+        $account = new \App\Models\Account();
+
+        $validate = (object) $request->validated();
+
+        foreach ($validate as $key => $value) {
+            $account->$key = $value;
+        }
+
+        try {
+            $account->user_id = $auth->id;
+            $account->save();
+            return Resp::Success('تم', $account);
+        } catch (\Exception $e) {
+            return Resp::Error('حدث خطأ ما', $e->getMessage());
+        }
     }
 
     /**
@@ -73,7 +91,31 @@ class AccountsControllerResource extends Controller
      */
     public function update(UpdateAccountRequest $request, Account $account)
     {
-        //
+        $validate = (object) $request->validated();
+
+        $acc = $account;
+
+        if ($acc->user_id != auth()->user()->id) {
+            return Resp::Error('لا تملك هذا الحساب');
+        }
+
+        if (!Hash::check($validate->password, auth()->user()->password)) {
+            return Resp::Error('كلمة السر غير صحيحة');
+        }
+
+        foreach ($validate as $key => $value) {
+            if (isset($validate->password)) {
+                unset($validate->password);
+            }
+            $acc->$key = $value;
+        }
+
+        try {
+            $acc->save();
+            return Resp::Success('تم تحديث حساب مستخدم بنجاح', $acc);
+        } catch (\Exception $e) {
+            return Resp::Error('حدث خطأ ما', $e);
+        }
     }
 
     /**
@@ -84,6 +126,12 @@ class AccountsControllerResource extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        $auth = auth()->user();
+
+        if ($account->user_id == $auth->id) {
+            $account->delete();
+            return Resp::Success('تك الحذف بنجاح', $account);
+        }
+        return Resp::Error('انت لا تملك هذا الحساب', null);
     }
 }
