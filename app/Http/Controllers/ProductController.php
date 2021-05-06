@@ -104,7 +104,7 @@ class ProductController extends Controller
             'subCategory' => 'string',
         ]);
 
-        if (isset($validate->category)) {
+        if (isset($validate->category) && !isset($validate->subCategory)) {
             $filtered = \App\Models\Product::whereHas('category', function ($query) use ($validate) {
                 $query->where('name', $validate->category);
             })->with('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes')->get();
@@ -112,12 +112,28 @@ class ProductController extends Controller
             return Resp::Success('تم', $filtered);
         }
 
-        if (isset($validate->subCategory)) {
+        if (isset($validate->subCategory) && !isset($validate->category)) {
             $filtered = \App\Models\Product::whereHas('category', function ($query) use ($validate) {
                 $query->where('subCategory', '=', $validate->subCategory);
             })->with(['category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes'])->get();
 
             return Resp::Success('تم', $filtered);
+        }
+
+        if (isset($validate->subCategory) && isset($validate->category)) {
+
+            try {
+                //code...
+                $all = \App\Models\Product::whereHas('category', function ($q) use ($validate) {
+                    $q->where(['name' => $validate->category, 'subCategory' => $validate->subCategory]);
+                })
+                    ->get();
+                $all->load('category', 'store.store', 'rate', 'product_photos', 'additional_description', 'product_sizes');
+                return Resp::Success('تم', $all);
+            } catch (\Throwable $th) {
+                //throw $th;
+                return Resp::Error('حدث خطأ ما', $th->getMessage());
+            }
         }
 
         if (!isset($validate->subCategory) && !isset($validate->category)) {
@@ -138,5 +154,38 @@ class ProductController extends Controller
         $data = Product::inRandomOrder()->limit(3)->get();
 
         return Resp::Success('ok', $data);
+    }
+
+    public function suggestions()
+    {
+        $cat = new \App\Models\Category();
+        $prod = new Product();
+
+        // get random sub categories
+        $randomCat = $cat::inRandomOrder()->first();
+
+        // bring products of this category Limit 100
+        $catProd = $prod::whereHas('category', function ($q) use ($randomCat) {
+            $q->where('name', $randomCat['name']);
+        })->limit(100)->get();
+
+        //the category
+        $catName = $randomCat['name'];
+        // three images
+        $threeImgs = [];
+        $randImgs = $catProd->random(3);
+        foreach ($randImgs as $key => $value) {
+            $threeImgs[] = $value->photo;
+        }
+
+        // important product (top rated)
+        $max = $catProd->max('rate.*.rate');
+        $topProd = $catProd->where('rate.*.rate', $max)->first();
+
+        return Resp::Success('تم', [
+            'watchAll' => $catName,
+            'imgs' => $threeImgs,
+            'topProduct' => $topProd,
+        ]);
     }
 }

@@ -34,10 +34,6 @@ class RouteFileRegistrar
     {
         $router = $this->router;
 
-        Log::alert('erorrrrrrrrrrrr', [
-            'error' => $router
-        ]);
-
         require $routes;
     }
 }
