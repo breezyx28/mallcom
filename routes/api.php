@@ -186,7 +186,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::apiResource('states', StateControllerResource::class);
 
         // categories
-        Route::apiResource('categories', CategoryControllerResource::class);
+        Route::apiResource('categories', CategoryControllerResource::class)->except('update');
+        Route::post('category/{category}', [CategoryControllerResource::class, 'update']);
 
         // sizes
         Route::apiResource('sizes', SizesControllerResource::class);

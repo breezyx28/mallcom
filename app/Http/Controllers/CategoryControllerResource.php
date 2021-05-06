@@ -77,18 +77,18 @@ class CategoryControllerResource extends Controller
 
         foreach ($validate as $key => $value) {
             $cat->$key = $value;
-        }
 
-        if (isset($validate->sub_img)) {
-            $cat->sub_img = Str::of($request->file('sub_img')->storePublicly('Category'));
-        }
-        if (isset($validate->cat_img)) {
-            $cat->cat_img = Str::of($request->file('cat_img')->storePublicly('Category'));
+            if (isset($validate->cat_img)) {
+                $cat->cat_img = Str::of($request->file('cat_img')->storePublicly('Category'));
+                $Category::where('name', $cat->name)->update(['cat_img' => Str::of($request->file('cat_img')->storePublicly('Category')) ?? null]);
+            }
+            if (isset($validate->sub_img)) {
+                $cat->sub_img = Str::of($request->file('sub_img')->storePublicly('Category'));
+            }
         }
 
         try {
             $cat->save();
-            $Category::where('name', $cat->name)->update(['cat_img' => Str::of($request->file('cat_img')->storePublicly('Category')) ? Str::of($request->file('cat_img')->storePublicly('Category')) : null]);
             return Resp::Success('تم', $cat);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
