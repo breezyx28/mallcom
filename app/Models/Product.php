@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $appends = ['final_price'];
-    protected $with = 'rate';
+    protected $with = ['rate'];
 
     public function category()
     {
@@ -77,5 +77,11 @@ class Product extends Model
         $discountedValue = ($price * ($discount / 100)) + ((int) $addPrice);
 
         return ($price - $discountedValue);
+    }
+
+    // make scope
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', "%{$term} %")->orWhere('name', 'like', "% {$term}%")->orWhere('name', 'like', "%{$term}%");
     }
 }
