@@ -78,7 +78,7 @@ class VerificationController extends Controller
             $user = \App\Models\User::find($validate->id);
             // $token = JWTAuth::fromUser($user);
 
-            $token = JWTAuth::login($user);
+            $token = JWTAuth::fromUser($user);
 
             return response()->json([
                 'success' => true,
