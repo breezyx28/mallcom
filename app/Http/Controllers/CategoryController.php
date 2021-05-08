@@ -47,7 +47,13 @@ class CategoryController extends Controller
             }
         });
 
-        return Resp::Success('تم بنجاح', $data);
+        $arr = [];
+        foreach ($data as $key => $value) {
+
+            $arr[] = $value;
+        }
+
+        return Resp::Success('تم بنجاح', $arr);
     }
 
     public function getSubCategories(Request $request)
