@@ -27,7 +27,7 @@ class UpdateAccountRequest extends FormRequest
     {
         return [
             'cardName' => 'string|max:100',
-            'cardNumber' => 'unique:accounts,cardNumber|numeric|digit:16',
+            'cardNumber' => 'unique:accounts,cardNumber|numeric|digits:16',
             'expireDate' => 'date',
             'password' => 'required|string'
         ];
