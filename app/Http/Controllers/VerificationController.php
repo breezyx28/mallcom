@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseMessage as Resp;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 use Tymon\JWTAuth\Facades\JWTAuth as JWTAuth;
 
 class VerificationController extends Controller
@@ -68,12 +69,17 @@ class VerificationController extends Controller
     {
         $validate = (object) $request->validate([
             'id' => 'required|integer',
-            'verificationCode' => 'required|numeric'
+            'verificationCode' => 'required|integer'
         ]);
 
         try {
+            // validate request into DB
+            $d = \App\Models\Verification::where(['user_id' => $validate->id, 'code' => $validate->verificationCode])->firstOr(function () {
+                throw new \Exception("البيانات غير صحيحة");
+            });
+
             //code...
-            \App\Models\Verification::where(['user_id' => $validate->id, 'code' => $validate->verificationCode])->update(['verified' => 1]);
+            $verf = \App\Models\Verification::where(['user_id' => $validate->id, 'code' => $validate->verificationCode])->update(['verified' => 1]);
 
             $user = \App\Models\User::find($validate->id);
             // $token = JWTAuth::fromUser($user);
@@ -90,7 +96,7 @@ class VerificationController extends Controller
             return Resp::Success('تم تاكيد الحساب بنجاح',);
         } catch (\Throwable $th) {
             //throw $th;
-            return Resp::Error('Error while verifying', $th->getMessage());
+            return Resp::Error('البيانات غير صحيحة', $th->getMessage());
         }
     }
 }
