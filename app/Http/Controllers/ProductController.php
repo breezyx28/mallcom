@@ -187,7 +187,7 @@ class ProductController extends Controller
             $topProd = $catProd->sortByDesc('rate.*.rate')->values()->all();
 
             // convert $topProd to collection
-            $col = collect($topProd)->slice(1, 3)->values();
+            $col = collect($topProd)->slice(1, 5)->values();
             $arr[] = [
                 'watchAll' => $catName,
                 'imgs' => $threeImgs,
