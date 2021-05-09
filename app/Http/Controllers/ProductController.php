@@ -162,30 +162,45 @@ class ProductController extends Controller
         $prod = new Product();
 
         // get random sub categories
-        $randomCat = $cat::inRandomOrder()->first();
+        $randomCat = $cat::inRandomOrder()->limit(5)->get()->groupBy('name');
 
-        // bring products of this category Limit 100
-        $catProd = $prod::whereHas('category', function ($q) use ($randomCat) {
-            $q->where('name', $randomCat['name']);
-        })->limit(100)->get();
+        $arr = [];
+        foreach ($randomCat as $key => $value) {
 
-        //the category
-        $catName = $randomCat['name'];
-        // three images
-        $threeImgs = [];
-        $randImgs = $catProd->random(3);
-        foreach ($randImgs as $key => $value) {
-            $threeImgs[] = $value->photo;
+            // bring products of this category Limit 100
+            $catProd = $prod::whereHas('category', function ($q) use ($key) {
+                $q->where('name', $key);
+            })->limit(100)->get();
+
+            //the category
+            $catName = $key;
+            // three images
+            $threeImgs = [];
+            // return Resp::Success('ok', $catProd->random(3));
+            $randImgs = $catProd->isNotEmpty() ? $catProd->random(3) : [];
+            foreach ($randImgs as $key => $value) {
+                $threeImgs[] = $value->photo;
+            }
+
+            // important product (top rated)
+            // $max = $catProd->max('rate.*.rate');
+            $topProd = $catProd->sortByDesc('rate.*.rate')->values()->all();
+
+            // convert $topProd to collection
+            $col = collect($topProd)->slice(1, 3)->values();
+            $arr[] = [
+                'watchAll' => $catName,
+                'imgs' => $threeImgs,
+                'topProduct' => $col->map(function ($item, $key) {
+                    return [
+                        'id' => $item->id,
+                        'photo' => $item->photo,
+                    ];
+                })
+            ];
         }
 
-        // important product (top rated)
-        $max = $catProd->max('rate.*.rate');
-        $topProd = $catProd->where('rate.*.rate', $max)->first();
 
-        return Resp::Success('تم', [
-            'watchAll' => $catName,
-            'imgs' => $threeImgs,
-            'topProduct' => $topProd,
-        ]);
+        return Resp::Success('تم', $arr);
     }
 }
