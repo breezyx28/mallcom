@@ -29,6 +29,7 @@ use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\StoreAddDescControllerResource;
 use App\Http\Controllers\StoreControllerResource;
 use App\Http\Controllers\StoreProdPhotControllerResource;
+use App\Http\Controllers\StoreProductsController;
 use App\Http\Controllers\StoreProductsControllerResource;
 use App\Http\Controllers\UserAccountControllerResource;
 use App\Http\Controllers\UserControllerResource;
@@ -162,6 +163,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         // stores
         Route::ApiResource('stores', StoreControllerResource::class)->except('update');
         Route::post('store/{store}', [StoreControllerResource::class, 'update']);
+        Route::get('storeProducts', [StoreProductsController::class, 'storeProducts']);
 
         // products
         Route::ApiResource('products', ProductControllerResource::class)->except('store');
