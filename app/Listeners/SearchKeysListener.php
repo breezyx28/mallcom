@@ -13,10 +13,21 @@ class SearchKeysListener
     {
         $searchKey = new \App\Models\SearchKeys();
 
-        $searchKey->key_word = $event->key;
+        // $searchKey->key_word = $event->key;
+        // $searchKey->product_id = $event->product_id;
 
         try {
-            $searchKey->save();
+            if ($searchKey::where([
+                'key_word'  => $event->key,
+                'product_id'  => $event->product_id
+            ])->first()) {
+                $searchKey::Create(
+                    [
+                        'key_word'  => $event->key,
+                        'product_id'  => $event->product_id,
+                    ]
+                );
+            }
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }

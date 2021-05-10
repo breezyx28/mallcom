@@ -24,7 +24,7 @@ class SearchController extends Controller
         }
 
         // save the key word to search_keys database
-        event(new SearchKeysEvent($validate->search, $result[0]->product_id));
+        event(new SearchKeysEvent($result[0]->name, $result[0]->product_id));
 
         // check if there is sort
         if (isset($validate->sort)) {

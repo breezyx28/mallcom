@@ -10,4 +10,5 @@ class SearchKeys extends Model
     use HasFactory;
 
     protected $table = 'search_keys';
+    protected $fillable = ['key_word'];
 }
