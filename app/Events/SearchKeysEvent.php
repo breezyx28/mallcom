@@ -8,11 +8,12 @@ use Illuminate\Queue\SerializesModels;
 
 class SearchKeysEvent
 {
-    public $key;
+    public $key, $product_id;
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct($key)
+    public function __construct($key, $product_id)
     {
         $this->$key = $key;
+        $this->$product_id = $product_id;
     }
 }

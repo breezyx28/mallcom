@@ -22,6 +22,7 @@ use App\Http\Controllers\ProductsPhotoControllerResource;
 use App\Http\Controllers\RateControllerResource;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleControllerResource;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SizesControllerResource;
 use App\Http\Controllers\StateControllerResource;
 use App\Http\Controllers\StatisticsController;
@@ -70,6 +71,8 @@ Route::group(['prefix' => GUEST], function () {
 
     // Suggestions from products
     Route::get('suggestions', [ProductController::class, 'suggestions']);
+    // search product with filter
+    Route::post('search', [SearchController::class, 'search']);
 
     // products
     Route::ApiResource('products', ProductControllerResource::class)->only('index', 'show');
