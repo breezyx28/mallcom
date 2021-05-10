@@ -9,6 +9,7 @@ class SearchKeys extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $table = 'search_keys';
-    protected $fillable = ['key_word'];
+    protected $fillable = ['key_word', 'product_id'];
 }

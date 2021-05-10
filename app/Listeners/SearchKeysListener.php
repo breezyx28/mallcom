@@ -13,15 +13,12 @@ class SearchKeysListener
     {
         $searchKey = new \App\Models\SearchKeys();
 
-        // $searchKey->key_word = $event->key;
-        // $searchKey->product_id = $event->product_id;
-
         try {
             if ($searchKey::where([
                 'key_word'  => $event->key,
                 'product_id'  => $event->product_id
             ])->first()) {
-                $searchKey::Create(
+                $searchKey::create(
                     [
                         'key_word'  => $event->key,
                         'product_id'  => $event->product_id,
