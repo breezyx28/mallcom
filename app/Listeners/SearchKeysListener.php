@@ -25,6 +25,7 @@ class SearchKeysListener
                     ]
                 );
             }
+            return Resp::Success('ok', $searchKey);
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }

@@ -36,11 +36,11 @@ class StoreControllerResource extends Controller
 
         foreach ($validate as $key => $value) {
 
-            $store->$key = $value;
-        }
+            if ($validate->$key == 'thumbnail') {
+                $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
+            }
 
-        if (isset($validate->thumbnail)) {
-            $store->thumbnail = Str::of($request->file('thumbnail')->storePublicly('Stores'));
+            $store->$key = $value;
         }
 
         try {
