@@ -13,7 +13,7 @@ class Order extends Model
 
     public function orderNumber()
     {
-        return $this->belongsTo(OrdersNumber::class);
+        return $this->belongsTo(OrdersNumber::class, 'orders_number_id', 'id');
     }
 
     public function state()

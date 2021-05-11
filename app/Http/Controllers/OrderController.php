@@ -23,10 +23,20 @@ class OrderController extends Controller
         ]);
 
         $orders = \App\Models\Order::with('product', 'state', 'orderNumber')
-            ->where(['user_id', $this->user->id, 'status' => $validate['status']])
+            ->where(['user_id', auth()->user()->id, 'status' => $validate['status']])
             ->get();
 
         return Resp::Success('تم', $orders);
+    }
+
+    public function orders()
+    {
+        $orders = \App\Models\Order::with('product', 'state', 'orderNumber')
+            ->where(['user_id' => auth()->user()->id])->get();
+
+        $data = $orders->groupBy('orderNumber.orderNumber')->all();
+
+        return Resp::Success('تم', $data);
     }
 
     public function getMyOrder(Request $request)
