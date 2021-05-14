@@ -48,7 +48,8 @@ class LoginController extends Controller
     public function profile()
     {
         $user = auth()->user()->id;
-        return Resp::Success('تم', $user::where('id', $user)->with('favourit')->get());
+
+        return Resp::Success('تم', \App\Models\User::with('favourit')->where('id', $user)->get());
     }
 
     public function updateProfile(updateUsersRequest $request)

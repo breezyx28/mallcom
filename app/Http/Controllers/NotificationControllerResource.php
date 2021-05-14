@@ -35,6 +35,8 @@ class NotificationControllerResource extends Controller
         $validate = (object) $request->validated();
         $notification = new Notification();
 
+        return Resp::Success('ok', $validate);
+
         foreach ($validate as $key => $value) {
             $notification->$key = $value;
         }

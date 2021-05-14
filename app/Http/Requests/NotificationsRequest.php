@@ -32,7 +32,9 @@ class NotificationsRequest extends FormRequest
         return [
             'title' => 'required|string|max:191',
             'content' => 'required|string|max:191',
-            'user_id' => 'required|integer|exists:user,id',
+            'user_id' => 'required_without:pulk_users|integer|exists:users,id',
+            'pulk_users' => 'required_without:user_id|array',
+            'pulk_users.*' => 'integer|exists:users,id',
         ];
     }
 
@@ -44,5 +46,20 @@ class NotificationsRequest extends FormRequest
             $messages[] = $message;
         }
         throw new HttpResponseException(response()->json(['success' => false, 'errors' => $messages], 200));
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'حقل العنوان مطلوب',
+            'title.string' => 'حقل العنوان يجب ان يكون نص',
+            'title.max' => 'حقل العنوان تجاوز طول الأحرف المسموحة',
+            'content.required' => 'حقل المحتوى مطلوب',
+            'content.string' => 'حقل المحتوى يجب ان يكون نص',
+            'content.max' => 'حقل المحتوى تجاوز طول الأحرف المسموحة',
+            'user_id.required' => 'حقل رقم  المستخدم المرجعي مطلوب',
+            'user_id.integer' => 'حقل رقم المستخدم المرجعي يجب ان يكون رقم صحيح',
+            'user_id.exists' => 'حقل رقم المستخدم المرجعي غير صحيح',
+        ];
     }
 }

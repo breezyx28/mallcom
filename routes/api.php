@@ -206,5 +206,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // ads
         Route::apiResource('ads', AdsControllerResource::class);
+
+        // Notifications
+        Route::apiResource('notifications', NotificationControllerResource::class)->except('index');
     });
 });
