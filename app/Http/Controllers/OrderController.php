@@ -34,7 +34,7 @@ class OrderController extends Controller
         $orders = \App\Models\Order::with('product', 'state', 'orderNumber')
             ->where(['user_id' => auth()->user()->id])->get();
 
-        $data = $orders->groupBy('orderNumber.orderNumber')->all();
+        $data = collect($orders->groupBy('orderNumber.orderNumber')->all());
 
         return Resp::Success('تم', $data);
     }
@@ -74,6 +74,58 @@ class OrderController extends Controller
             return Resp::Success('ok', ["orderInfo" => $res, "userInfo" => auth()->user(), "invoiceInfo" => $invoiceInfo]);
         } catch (\Throwable $th) {
             //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
+    }
+
+    public function getMyOrderByNumber(Request $request)
+    {
+        $validate = (object) $request->validate([
+            'orderNumber' => 'string|max:191'
+        ]);
+
+        try {
+            $ordersNumbers = \App\Models\OrdersNumber::where('orderNumber', $validate->orderNumber)->get()->pluck('id');
+
+            $data = \App\Models\Order::with('product:id,price,discount')->whereIn('id', $ordersNumbers)->get();
+
+            return Resp::Success('ok', $data);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
+    }
+
+    public function ordersDetails()
+    {
+
+        $data =  \App\Models\OrdersNumber::with('order.product')->whereHas('order', function ($q) {
+            $q->where('user_id', auth()->user()->id);
+        })->get();
+
+        $info = collect($data);
+
+        $schema =  [
+            'date' => '',
+            'products' => '',
+            'number' => '',
+            'total' => '',
+            'status' => '',
+        ];
+
+        $result = $info->map(function ($item, $key) use ($schema) {
+
+            $schema['date'] = $item->updated_at;
+            // $schema['products'] =
+            // return [
+            //     $
+            // ]
+
+        });
+
+        try {
+            return Resp::Success('ok', $data);
+        } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
     }

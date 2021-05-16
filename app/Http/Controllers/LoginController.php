@@ -191,7 +191,7 @@ class LoginController extends Controller
                     $verf->code = $code;
                     $verf->save();
 
-                    return Resp::Success('تم التاكد بنجاح', $user);
+                    return Resp::Success('تم إرسال الرقم بنجاح', $user->id);
                 } catch (\Exception $e) {
                     return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة لاحقا', $e->getMessage());
                 }
