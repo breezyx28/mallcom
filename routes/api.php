@@ -112,7 +112,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::group(['prefix' => BASE, 'middleware' => 'userWare'], function () {
 
-
         // user personal
         Route::get('profile', [LoginController::class, 'profile']);
         Route::post('logout', [LoginController::class, 'logout']);

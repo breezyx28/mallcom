@@ -206,7 +206,7 @@ class LoginController extends Controller
                     $sms->sendCode($check['phone']);
                     $user->notify(new VerifiyAccount($user->id, $code));
 
-                    return Resp::Success('تم التأكد بنجاح ... قم بتأكيد حسابك أولا', $user->get('id as userID'));
+                    return Resp::Success('تم التأكد بنجاح ... قم بتأكيد حسابك أولا', $user->id);
                 } catch (\Exception $e) {
                     return Resp::Error('خطأ في حفظ الرمز التاكيد ... الرجاء المحاولة مرة أخرى', $e->getMessage());
                 }

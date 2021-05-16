@@ -108,7 +108,7 @@ class OrderController extends Controller
         $schema =  [
             'date' => '',
             'products' => '',
-            'number' => '',
+            'orderNumber' => '',
             'total' => '',
             'status' => '',
         ];
@@ -116,15 +116,17 @@ class OrderController extends Controller
         $result = $info->map(function ($item, $key) use ($schema) {
 
             $schema['date'] = $item->updated_at;
-            // $schema['products'] =
-            // return [
-            //     $
-            // ]
+            $schema['products'] = count($item->order);
+            $schema['orderNumber'] = $item->orderNumber;
+            $schema['total'] = collect($item->order)->sum('product.final_price');
 
+            $schema['status'] = $item->order[0]->status;
+
+            return $schema;
         });
 
         try {
-            return Resp::Success('ok', $data);
+            return Resp::Success('ok', $result);
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
