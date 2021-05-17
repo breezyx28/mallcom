@@ -52,6 +52,13 @@ class LoginController extends Controller
         return Resp::Success('تم', \App\Models\User::with('favourit')->where('id', $user)->get());
     }
 
+    public function storeProfile()
+    {
+        $user = auth()->user()->id;
+
+        return Resp::Success('تم', \App\Models\Store::where('user_id', $user)->get());
+    }
+
     public function updateProfile(updateUsersRequest $request)
     {
         $validate = (object) $request->validated();

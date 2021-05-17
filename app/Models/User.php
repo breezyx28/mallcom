@@ -34,6 +34,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Favourit::class, 'user_id', 'id');
     }
 
+    public function store()
+    {
+        return $this->hasMany(Store::class, 'user_id', 'id');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

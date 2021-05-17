@@ -155,6 +155,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // store Invoices
         Route::get('storeInvoices', [InvoicesController::class, 'storeInvoices']);
+
+        // my profile
+        Route::get('storeProfile', [LoginController::class, 'storeProfile']);
     });
 
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
