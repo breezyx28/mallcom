@@ -24,7 +24,7 @@ class StoreWare
         //     $auth->Role()->roleCode == 3
         // ]);
 
-        if (!$auth->isAuthorized() || !($auth->Role()->position == 'store')) {
+        if (($auth->isAuthorized() == false) || ($auth->Role()->position == 'store') == false) {
             return Resp::Error('غير مصرح');
         }
         return $next($request);

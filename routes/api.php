@@ -152,6 +152,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // store product Photo
         Route::apiResource('storeProductPhotos', StoreProdPhotControllerResource::class);
+
+        // store Invoices
+        // Route::apiResource('')
     });
 
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
