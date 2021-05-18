@@ -27,19 +27,10 @@ class InvoicesController extends Controller
         $order = new Order();
 
         // get only my store product form order model
-        $myProducts = $order::whereHas('product.store', function ($q) {
+        $myProducts = $order::with('state', 'user', 'product')->whereHas('product.store', function ($q) {
             $q->where('user_id', auth()->user()->id);
         })->get();
 
-        // $schema = [
-        //     'productName' => '',
-        //     'productPrice' => '',
-        //     'productName' => '',
-        //     'productName' => '',
-        //     'productName' => '',
-        //     'productName' => '',
-        //     'productName' => '',
-        // ];
 
         return Resp::Success('done', $myProducts);
     }
