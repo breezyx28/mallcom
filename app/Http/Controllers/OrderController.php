@@ -96,6 +96,26 @@ class OrderController extends Controller
         }
     }
 
+    public function storeOrders(Request $request)
+    {
+        $validate = (object) $request->validate([
+            'orderNumber' => 'string|max:191'
+        ]);
+
+        try {
+            $ordersNumbers = \App\Models\OrdersNumber::where('orderNumber', $validate->orderNumber)->get()->pluck('id');
+
+            $data = \App\Models\Order::with('product:id,price,discount', 'user', 'state', 'orderNumber')->whereHas('product.store', function ($q) {
+                $q->where('user_id', auth()->user()->id);
+            })->whereIn('orders_number_id', $ordersNumbers)->get();
+
+            return Resp::Success('ok', $data);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
+    }
+
     public function ordersDetails()
     {
 

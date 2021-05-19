@@ -158,6 +158,12 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // my profile
         Route::get('storeProfile', [LoginController::class, 'storeProfile']);
+
+        // notification
+        Route::apiResource('storeNotifications', NotificationControllerResource::class)->only('index');
+
+        // order by order id
+        Route::get('storeOrders', [OrderController::class, 'storeOrders']);
     });
 
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
