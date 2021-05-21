@@ -142,6 +142,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         // rate notification
         Route::apiResource('myNotifications', NotificationControllerResource::class)->only('index');
         Route::get('readOne/{id}', [NotificationContoller::class, 'readOne']);
+        Route::get('readAll', [NotificationContoller::class, 'readAll']);
     });
 
     Route::group(['prefix' => BASE, 'middleware' => 'storeWare'], function () {

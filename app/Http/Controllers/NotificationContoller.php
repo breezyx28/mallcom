@@ -23,5 +23,13 @@ class NotificationContoller extends Controller
 
     public function readAll()
     {
+        $user = auth()->user()->id;
+
+        try {
+            \App\Models\Notification::where('user_id', $user)->update(['isReaded' => true]);
+            return Resp::Success('تم');
+        } catch (\Throwable $th) {
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
     }
 }
