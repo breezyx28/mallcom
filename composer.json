@@ -45,7 +45,8 @@
         "files": [
             "app/helper/response.php",
             "app/helper/authUser.php",
-            "app/helper/array.php"
+            "app/helper/array.php",
+            "app/helper/sendMsg.php"
         ]
     },
     "autoload-dev": {

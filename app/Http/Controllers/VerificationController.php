@@ -48,6 +48,7 @@ class VerificationController extends Controller
             'to' => $this->phone,
             'from' => 'mallcom',
             'sms' => "$this->code رمز التأكيد",
+            'unicode' => '1'
         ]);
 
         $resp =  $http->json();

@@ -8,6 +8,7 @@ use App\Http\Controllers\AdsControllerResource;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryControllerResource;
 use App\Http\Controllers\FavouritControllerResource;
+use App\Http\Controllers\ForgetPassword;
 use App\Http\Controllers\InvoiceControllerResource;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\LoginController;
@@ -59,7 +60,8 @@ const ADMIN = 'v1/admin';
 Route::post(BASE . '/login', [LoginController::class, 'Login']);
 Route::post(GUEST . '/accountCheck', [LoginController::class, 'accountCheck']);
 Route::post(BASE . '/register', [RegisterController::class, 'register']);
-
+Route::post(BASE . '/forgetPassword', [ForgetPassword::class, 'forgetPassword']);
+Route::post(BASE . '/newPassword', [ForgetPassword::class, 'newPassword']);
 Route::get(BASE . '/filter', [StatisticsController::class, 'productsFilter']);
 
 // public routes
@@ -167,6 +169,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // order by order id
         Route::get('storeOrders', [OrderController::class, 'storeOrders']);
+        Route::get('allStoreOrders', [OrderController::class, 'allStoreOrders']);
     });
 
     Route::group(['prefix' => ADMIN, 'middleware' => 'adminWare'], function () {
