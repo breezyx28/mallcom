@@ -27,7 +27,7 @@ class NotificationContoller extends Controller
 
         try {
             \App\Models\Notification::where('user_id', $user)->update(['isReaded' => true]);
-            return Resp::Success('تم');
+            return Resp::Success('تم قراءة جميع الإشعارات');
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
