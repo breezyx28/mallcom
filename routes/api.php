@@ -12,6 +12,7 @@ use App\Http\Controllers\InvoiceControllerResource;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaterialControllerResource;
+use App\Http\Controllers\NotificationContoller;
 use App\Http\Controllers\NotificationControllerResource;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderControllerResource;
@@ -140,6 +141,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // rate notification
         Route::apiResource('myNotifications', NotificationControllerResource::class)->only('index');
+        Route::get('readOne/{id}', [NotificationContoller::class, 'readOne']);
     });
 
     Route::group(['prefix' => BASE, 'middleware' => 'storeWare'], function () {
