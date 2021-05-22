@@ -87,7 +87,7 @@ class OrderController extends Controller
         try {
             $ordersNumbers = \App\Models\OrdersNumber::where('orderNumber', $validate->orderNumber)->get()->pluck('id');
 
-            $data = \App\Models\Order::with('product:id,price,discount')->whereIn('orders_number_id', $ordersNumbers)->get();
+            $data = \App\Models\Order::with('product')->whereIn('orders_number_id', $ordersNumbers)->get();
 
             return Resp::Success('ok', $data);
         } catch (\Throwable $th) {
@@ -165,6 +165,6 @@ class OrderController extends Controller
         })->get();
 
 
-        return Resp::Success('done', $myProducts);
+        return Resp::Success('تم', $myProducts);
     }
 }
