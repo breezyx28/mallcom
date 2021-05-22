@@ -45,6 +45,10 @@ class StoreControllerResource extends Controller
 
         try {
             $store->save();
+
+            // update user role to store
+            \App\Models\User::where('id', $validate->user_id)->update(['role_id' => 2]);
+
             return Resp::Success('تم بنجاح', $store);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ ما', $e->getMessage());
