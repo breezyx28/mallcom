@@ -42,7 +42,7 @@ class UserControllerResource extends Controller
 
 
             if ($validate->$key == 'password') {
-                $user->password = Hash::make($validate->$key);
+                $user->password = null;
             }
 
             if ($validate->$key == 'birthDate') {
@@ -57,6 +57,7 @@ class UserControllerResource extends Controller
             $user->thumbnail = $request->file('thumbnail')->storePublicly('Profile');
         }
         $user->role_id = 3;
+        $user->password = Hash::make($request->password);
 
         try {
             $user->save();

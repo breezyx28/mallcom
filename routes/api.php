@@ -23,6 +23,7 @@ use App\Http\Controllers\ProductSizesControllerResource;
 use App\Http\Controllers\ProductsPhotoControllerResource;
 use App\Http\Controllers\RateControllerResource;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleControllerResource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SizesControllerResource;
@@ -222,6 +223,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // roles
         Route::apiResource('roles', RoleControllerResource::class);
+        Route::post('givePermission', [RoleController::class, 'givePermission']);
 
         // ads
         Route::apiResource('ads', AdsControllerResource::class);
