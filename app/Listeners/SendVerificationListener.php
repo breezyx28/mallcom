@@ -37,6 +37,19 @@ class SendVerificationListener
                 //throw $th;
                 ResponseMessage::Error('Error while sending verification message', $th->getMessage());
             }
+        } else {
+
+            try {
+                //code...
+                $verify = new Verification();
+                $verify->code = $code;
+                $verify->user_id = $event->user->id;
+                $verify->verified = 0;
+                $verify->save();
+            } catch (\Throwable $th) {
+                //throw $th;
+                ResponseMessage::Error('Error while sending verification message', $th->getMessage());
+            }
         }
     }
 }
