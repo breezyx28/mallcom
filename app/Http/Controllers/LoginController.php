@@ -162,11 +162,11 @@ class LoginController extends Controller
         // if user exists
         if ($check) {
             // check user verification on verification Model
-            $verification = \App\Models\Verification::where(['user_id' => $check['id']])->firstOr(function () {
+            $verification = \App\Models\Verification::where(['user_id' => $check->id])->firstOr(function () {
                 return false;
             });
 
-            $user = \App\Models\User::find($check['id']);
+            $user = \App\Models\User::find($check->id);
 
             // if user exists but not exists on verification model
             if (!$verification) {
@@ -176,7 +176,7 @@ class LoginController extends Controller
                     event(new NotificationEvent($user->id, 'verify'));
                     event(new sendVerificationEvent($user));
                     DB::commit();
-                    return Resp::Success('تم ارسال رسالة التأكيد بنجاح');
+                    return Resp::Success('تم ارسال رسالة التأكيد بنجاح', $user->id);
                 } catch (\Throwable $th) {
                     //throw $th;
                     DB::rollback();
