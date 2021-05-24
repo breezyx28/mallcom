@@ -21,6 +21,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductControllerResource;
 use App\Http\Controllers\ProductSizesControllerResource;
 use App\Http\Controllers\ProductsPhotoControllerResource;
+use App\Http\Controllers\ProductsPhotosController;
 use App\Http\Controllers\RateControllerResource;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleController;
@@ -157,7 +158,9 @@ Route::group(['middleware' => 'auth.jwt'], function () {
         Route::apiResource('storeAdditionalDescription', StoreAddDescControllerResource::class);
 
         // store product Photo
-        Route::apiResource('storeProductPhotos', StoreProdPhotControllerResource::class);
+        Route::apiResource('storeProductPhotos', StoreProdPhotControllerResource::class)->except('update');
+        Route::post('storeProductPhoto/{storeProductPhoto}', [StoreProdPhotControllerResource::class, 'update']);
+        Route::get('storeProductPhotosBy/{productsID}', [ProductsPhotosController::class, 'storeProductPhotosByID']);
 
         // store Invoices
         Route::get('storeInvoices', [InvoicesController::class, 'storeInvoices']);

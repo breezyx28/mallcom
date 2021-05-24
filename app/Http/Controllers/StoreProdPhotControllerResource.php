@@ -9,13 +9,13 @@ use App\Models\ProductsPhoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class StoreProdPhotControllerResource extends Controller
 {
-    private $products;
-    public function __construct()
+    public function products()
     {
-        $this->products = \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id')->toArray();
+        return \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id')->toArray();
     }
     /**
      * Display a listing of the resource.
@@ -24,7 +24,7 @@ class StoreProdPhotControllerResource extends Controller
      */
     public function index()
     {
-        $photos = \App\Models\ProductsPhoto::whereIn('product_id', $this->products)->get();
+        $photos = \App\Models\ProductsPhoto::whereIn('product_id', $this->products())->get();
 
         return Resp::Success('تم', $photos);
     }
@@ -40,7 +40,7 @@ class StoreProdPhotControllerResource extends Controller
         $prodPho = new ProductsPhoto();
         $validate = (object) $request->validated();
 
-        if (!in_array($validate->product_id, $this->products)) {
+        if (!in_array($validate->product_id, $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
@@ -78,13 +78,12 @@ class StoreProdPhotControllerResource extends Controller
      * @param  \App\Models\ProductsPhoto  $productsPhoto
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductsPhoto $productsPhoto)
+    public function show(ProductsPhoto $storeProductPhoto)
     {
-        if (!in_array($productsPhoto->product_id, $this->products)) {
+        if (!in_array($storeProductPhoto->product_id, $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
-
-        return Resp::Success('تم', $productsPhoto);
+        return Resp::Success('تم', $storeProductPhoto);
     }
 
     /**
@@ -94,19 +93,29 @@ class StoreProdPhotControllerResource extends Controller
      * @param  \App\Models\ProductsPhoto  $productsPhoto
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductPhotosRequest $request, ProductsPhoto $productsPhoto)
+    public function update(UpdateProductPhotosRequest $request, ProductsPhoto $storeProductPhoto)
     {
         $validate = (object) $request->validated();
 
-        if (!in_array($validate->product_id, $this->products)) {
+        if (!in_array($storeProductPhoto->product_id, $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
-        $productsPhoto->photo = Str::of($request->file('photo')->storePublicly('Product'));
+        // remove old photo
+        try {
+            $remove = Str::replaceFirst('https://laravelstorage.sgp1.digitaloceanspaces.com/', '', $storeProductPhoto->photo);
+            //code...
+            Storage::disk('spaces')->delete($remove);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ أثناء حذف الصورة القديمة', $th->getMessage());
+        }
+
+        $storeProductPhoto->photo = Str::of($request->file('photo')->storePublicly('Product'));
 
         try {
-            $productsPhoto->save();
-            return Resp::Success('تم بنجاح', $productsPhoto);
+            $storeProductPhoto->save();
+            return Resp::Success('تم بنجاح', $storeProductPhoto);
         } catch (\Throwable $th) {
             return Resp::Error('حدث خطأ ما', $th->getMessage());
         }
@@ -118,13 +127,13 @@ class StoreProdPhotControllerResource extends Controller
      * @param  \App\Models\ProductsPhoto  $productsPhoto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductsPhoto $productsPhoto)
+    public function destroy(ProductsPhoto $storeProductPhoto)
     {
-        if (!in_array($productsPhoto->product_id, $this->products)) {
+        if (!in_array($storeProductPhoto->product_id, $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
-        $productsPhoto->delete();
-        return Resp::Success('تم الحذف', $productsPhoto);
+        $storeProductPhoto->delete();
+        return Resp::Success('تم الحذف', $storeProductPhoto);
     }
 }
