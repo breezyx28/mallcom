@@ -19,6 +19,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderControllerResource;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductControllerResource;
+use App\Http\Controllers\ProductSizesController;
 use App\Http\Controllers\ProductSizesControllerResource;
 use App\Http\Controllers\ProductsPhotoControllerResource;
 use App\Http\Controllers\ProductsPhotosController;
@@ -201,6 +202,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // products sizes
         Route::ApiResource('productSizes', ProductSizesControllerResource::class);
+        Route::get('productSize/{id}', [ProductSizesController::class, 'sizesByProductID']);
 
         // accounts
         Route::resource('accounts', AccountsControllerResource::class);
