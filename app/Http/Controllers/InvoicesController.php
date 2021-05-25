@@ -20,16 +20,13 @@ class InvoicesController extends Controller
 
     public function storeInvoices()
     {
-
-        $user = auth()->user();
-
         // get order Model
         $order = new Order();
 
         // get only my store product form order model
         $myProducts = $order::with('state:id,name,city', 'user:id,firstName,middleName,lastName,userName', 'product:id,name,price,discount,addetionalPrice', 'orderNumber')->whereHas('product.store', function ($q) {
             $q->where('user_id', auth()->user()->id);
-        })->get(['id', 'product_id', 'user_id', 'state_id', 'amount', 'order_address', 'status', 'created_at', 'updated_at']);
+        })->get(['id', 'product_id', 'user_id', 'state_id', 'amount', 'orders_number_id', 'order_address', 'status', 'created_at', 'updated_at']);
 
 
         return Resp::Success('done', $myProducts);

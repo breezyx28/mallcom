@@ -10,10 +10,9 @@ use Illuminate\Http\Request;
 
 class StoreAddDescControllerResource extends Controller
 {
-    private $products;
-    public function __construct()
+    public function products()
     {
-        $this->products = \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id')->toArray();
+        return \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id')->toArray();
     }
     /**
      * Display a listing of the resource.
