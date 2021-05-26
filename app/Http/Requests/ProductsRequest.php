@@ -39,7 +39,8 @@ class ProductsRequest extends FormRequest
             'addetionalPrice' => 'string',
             'category_id' => 'required|integer|exists:categories,id',
             'store_id' => 'required|integer|exists:stores,id',
-            'offerText' => 'string|max:191'
+            'offerText' => 'string|max:191',
+            'inventory' => 'integer',
         ];
     }
 

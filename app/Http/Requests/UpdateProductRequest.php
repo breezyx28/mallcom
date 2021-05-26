@@ -33,6 +33,7 @@ class UpdateProductRequest extends FormRequest
             'discount' => 'integer',
             'addetionalPrice' => 'string',
             'offerText' => 'string|max:191',
+            'inventory' => 'integer',
             'status' => 'boolean',
         ];
     }
