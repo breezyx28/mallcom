@@ -19,6 +19,6 @@ class ProductsPhotosController extends Controller
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
-        return Resp::Success('تم', \App\Models\StoreProduct::where('product_id', $productsID)->get());
+        return Resp::Success('تم', \App\Models\ProductsPhoto::where('product_id', $productsID)->get());
     }
 }
