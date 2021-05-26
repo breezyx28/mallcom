@@ -118,6 +118,28 @@ class OrderController extends Controller
         }
     }
 
+    public function adminOrders(Request $request)
+    {
+        $validate = (object) $request->validate([
+            'orderNumber' => 'string|max:191'
+        ]);
+
+        try {
+            // $ordersNumbers = \App\Models\OrdersNumber::where('orderNumber', $validate->orderNumber)->get()->pluck('id');
+
+            $data = \App\Models\Order::with('product:id,name,price,discount', 'user', 'state', 'orderNumber')->whereHas('orderNumber', function ($q) use ($validate) {
+                $q->where('orderNumber', $validate->orderNumber);
+            })->get();
+
+            $invoice = \App\Models\Invoice::where('orderNumber', $validate->orderNumber)->get();
+
+            return Resp::Success('ok', $data->push(['payment_method' => $invoice[0]->payment_method]));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return Resp::Error('حدث خطأ ما', $th->getMessage());
+        }
+    }
+
     public function ordersDetails()
     {
 

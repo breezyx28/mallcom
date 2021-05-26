@@ -216,6 +216,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // orders
         Route::apiResource('orders', OrderControllerResource::class)->except('destroy', 'store');
+        // order by order id
+        Route::get('adminOrders', [OrderController::class, 'adminOrders']);
 
         // states
         Route::apiResource('states', StateControllerResource::class);
