@@ -105,7 +105,7 @@ class OrderController extends Controller
         try {
             $ordersNumbers = \App\Models\OrdersNumber::where('orderNumber', $validate->orderNumber)->get()->pluck('id');
 
-            $data = \App\Models\Order::with('product:id,price,discount', 'user', 'state', 'orderNumber')->whereHas('product.store', function ($q) {
+            $data = \App\Models\Order::with('product:id,name,price,discount', 'user', 'state', 'orderNumber')->whereHas('product.store', function ($q) {
                 $q->where('user_id', auth()->user()->id);
             })->whereIn('orders_number_id', $ordersNumbers)->get();
 
