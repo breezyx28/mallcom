@@ -86,7 +86,7 @@ class UserOrderControllerResource extends Controller
             array_push($totals, ((\App\Models\Product::find($value['product_id'])->final_price) * $value['amount']));
             array_push($actualTotals, ((\App\Models\Product::find($value['product_id'])->price) * $value['amount']));
 
-            DB::table('products')->where('id', $value['product_id'])->increment('inventory', $value['amount']);
+            DB::table('products')->where('id', $value['product_id'])->decrement('inventory', $value['amount']);
         }
 
         // find all products prices using there id's
