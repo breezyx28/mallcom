@@ -13,6 +13,7 @@ use App\Http\Controllers\InvoiceControllerResource;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaterialControllerResource;
+use App\Http\Controllers\MaterialsController;
 use App\Http\Controllers\NotificationContoller;
 use App\Http\Controllers\NotificationControllerResource;
 use App\Http\Controllers\OrderController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleControllerResource;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SizesController;
 use App\Http\Controllers\SizesControllerResource;
 use App\Http\Controllers\StateControllerResource;
 use App\Http\Controllers\StatisticsController;
@@ -104,9 +106,11 @@ Route::group(['prefix' => GUEST], function () {
 
     // sizes
     Route::apiResource('sizes', SizesControllerResource::class)->only('index');
+    Route::get('getSizesBy', [SizesController::class, 'getSizesBy']);
 
     // materials
     Route::apiResource('materilas', MaterialControllerResource::class)->only('index');
+    Route::get('getMaterialsBy', [MaterialsController::class, 'getMaterialsBy']);
 
     // ads
     Route::apiResource('ads', AdsControllerResource::class)->only('index');
