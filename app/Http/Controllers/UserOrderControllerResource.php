@@ -36,6 +36,21 @@ class UserOrderControllerResource extends Controller
     {
         // validate inputs
         $validate = $request->validated();
+        // $error = [];
+        // foreach($validate['orders'] as $key => $value){
+        //     $prod = \App\Models\Product::find($value['product_id']);
+        //     if($prod->inventory < $value['amount']){
+        //         $error['code'] = true;
+        //         $error['id'] = $value['product_id'];
+        //         $error['available'] = $prod->;
+        //         return 0;
+        //     }
+
+        // }
+
+        // if($error['code']){
+        //     return Resp::Error("الكمية غير متوفرة ل {$error['id']} ... قم بإختيار كمية أقل","الكمية المتوفرة {$error['available']}");
+        // }
 
         $user = auth()->user();
 
@@ -64,6 +79,7 @@ class UserOrderControllerResource extends Controller
             $validate['orders'][$key]['orders_number_id'] = $ordersNumber->id;
             $validate['orders'][$key]['status'] = 'available';
             $validate['orders'][$key]['user_id'] = $user->id;
+            $validate['orders'][$key]['order_address'] = $value['order_address'] ?? null;
             $validate['orders'][$key]['created_at'] = Carbon::now();
             $validate['orders'][$key]['updated_at'] = Carbon::now();
 

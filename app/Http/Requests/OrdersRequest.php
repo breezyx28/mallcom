@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AmountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,11 +33,11 @@ class OrdersRequest extends FormRequest
         return [
             'orders' => 'required|array',
             'account_id' => 'nullable|exists:accounts,id',
-            'payment_method' => ['required', Rule::in(['cash', 'credit', 'bok'])],
+            'payment_method' => ['required', 'string', Rule::in(['cash', 'credit', 'bok'])],
             'orders.*.state_id' => 'nullable|integer|exists:states,id',
-            'orders.*.order_address' => 'required|max:191',
+            'orders.*.order_address' => 'max:191',
             'orders.*.product_id' => 'required|integer|exists:products,id',
-            'orders.*.amount' => 'required|integer|min:1',
+            'orders.*.amount' => ['required', 'integer', 'min:1', new AmountRule()],
         ];
     }
 
