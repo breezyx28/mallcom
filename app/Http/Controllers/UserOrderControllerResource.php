@@ -36,21 +36,6 @@ class UserOrderControllerResource extends Controller
     {
         // validate inputs
         $validate = $request->validated();
-        // $error = [];
-        // foreach($validate['orders'] as $key => $value){
-        //     $prod = \App\Models\Product::find($value['product_id']);
-        //     if($prod->inventory < $value['amount']){
-        //         $error['code'] = true;
-        //         $error['id'] = $value['product_id'];
-        //         $error['available'] = $prod->;
-        //         return 0;
-        //     }
-
-        // }
-
-        // if($error['code']){
-        //     return Resp::Error("الكمية غير متوفرة ل {$error['id']} ... قم بإختيار كمية أقل","الكمية المتوفرة {$error['available']}");
-        // }
 
         $user = auth()->user();
 
@@ -83,8 +68,9 @@ class UserOrderControllerResource extends Controller
             $validate['orders'][$key]['created_at'] = Carbon::now();
             $validate['orders'][$key]['updated_at'] = Carbon::now();
 
-            array_push($totals, ((\App\Models\Product::find($value['product_id'])->final_price) * $value['amount']));
-            array_push($actualTotals, ((\App\Models\Product::find($value['product_id'])->price) * $value['amount']));
+            $prod = \App\Models\Product::find($value['product_id']);
+            array_push($totals, (($prod->final_price) * $value['amount']));
+            array_push($actualTotals, (($prod->price) * $value['amount']));
 
             DB::table('products')->where('id', $value['product_id'])->decrement('inventory', $value['amount']);
         }
@@ -102,7 +88,7 @@ class UserOrderControllerResource extends Controller
             $data = event(new InvoiceEvent($invoiceNumber, $orderNumber, $totalPrice, $accountNumber, $actualTotalPrice, $payment_method))[0]->original;
 
             DB::commit();
-            return Resp::Success('تم بنجاح', $data);
+            return Resp::Success('تم بنجاح', $data['data']);
         } catch (\Exception $e) {
             DB::rollback();
             return Resp::Error('حدث خطأ ما', $e->getMessage());
