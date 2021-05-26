@@ -12,7 +12,7 @@ class StoreAddDescControllerResource extends Controller
 {
     public function products()
     {
-        return \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id')->toArray();
+        return \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id');
     }
     /**
      * Display a listing of the resource.
@@ -22,7 +22,7 @@ class StoreAddDescControllerResource extends Controller
     public function index()
     {
 
-        $all = AdditionalDescription::with('product')->whereIn('product_id', $this->products)->get();
+        $all = AdditionalDescription::with('product')->whereIn('product_id', $this->products())->get();
         return Resp::Success('تم', $all);
     }
 
@@ -36,7 +36,7 @@ class StoreAddDescControllerResource extends Controller
     {
         $validate = (object) $request->validated();
 
-        if (!in_array($validate->product_id, $this->products)) {
+        if (!in_array($validate->product_id, $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
@@ -61,13 +61,13 @@ class StoreAddDescControllerResource extends Controller
      * @param  \App\Models\AdditionalDescription  $additionalDescription
      * @return \Illuminate\Http\Response
      */
-    public function show(AdditionalDescription $additionalDescription)
+    public function show(AdditionalDescription $storeAdditionalDescription)
     {
-        if (!in_array($additionalDescription->product_id, $this->products)) {
+
+        if (!in_array($storeAdditionalDescription->product_id, (array) $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
-
-        return Resp::Success('تم', $additionalDescription);
+        return Resp::Success('تم', $storeAdditionalDescription);
     }
 
     /**
@@ -77,21 +77,21 @@ class StoreAddDescControllerResource extends Controller
      * @param  \App\Models\AdditionalDescription  $additionalDescription
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAdditionalDescriptionRequest $request, AdditionalDescription $additionalDescription)
+    public function update(UpdateAdditionalDescriptionRequest $request, AdditionalDescription $storeAdditionalDescription)
     {
         $validate = $request->validated();
 
-        if (!in_array($additionalDescription->product_id, $this->products)) {
+        if (!in_array($storeAdditionalDescription->product_id, (array) $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
         foreach ($validate as $key => $value) {
-            $additionalDescription->$key = $value;
+            $storeAdditionalDescription->$key = $value;
         }
 
         try {
-            $additionalDescription->save();
-            return Resp::Success('تم التحديث بنجاح', $additionalDescription);
+            $storeAdditionalDescription->save();
+            return Resp::Success('تم التحديث بنجاح', $storeAdditionalDescription);
         } catch (\Exception $e) {
             return Resp::Error('حدث خطأ', $e->getMessage());
         }
@@ -103,14 +103,14 @@ class StoreAddDescControllerResource extends Controller
      * @param  \App\Models\AdditionalDescription  $additionalDescription
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AdditionalDescription $additionalDescription)
+    public function destroy(AdditionalDescription $storeAdditionalDescription)
     {
-        if (!in_array($additionalDescription->product_id, $this->products)) {
+        if (!in_array($storeAdditionalDescription->product_id, $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
-        $additionalDescription->delete();
+        $storeAdditionalDescription->delete();
 
-        return Resp::Success('تم الحذف', $additionalDescription);
+        return Resp::Success('تم الحذف', $storeAdditionalDescription);
     }
 }
