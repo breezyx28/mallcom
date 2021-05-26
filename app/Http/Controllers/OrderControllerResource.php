@@ -40,10 +40,11 @@ class OrderControllerResource extends Controller
     public function show(Order $Order)
     {
         $data = $Order->load('user', 'product', 'orderNumber', 'state');
-        $orderNumberID = $Order->orders_number_id;
-        $orderNumber = \App\Models\OrdersNumber::find($orderNumberID)->orderNumber;
-        $invoice = \App\Models\Invoice::where('orderNumber', $orderNumber)->get();
-        return Resp::Success('تم', collect($data)->put('paymentMethod', $invoice[0]->payment_method));
+        // $orderNumberID = $Order->orders_number_id;
+        // $orderNumber = \App\Models\OrdersNumber::find($orderNumberID)->orderNumber;
+        // $invoice = \App\Models\Invoice::where('orderNumber', $orderNumber)->get();
+        // return Resp::Success('تم', collect($data)->put('paymentMethod', $invoice[0]->payment_method));
+        return Resp::Success('تم', $data);
     }
 
     /**

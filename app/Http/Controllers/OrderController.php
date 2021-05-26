@@ -109,7 +109,9 @@ class OrderController extends Controller
                 $q->where('user_id', auth()->user()->id);
             })->whereIn('orders_number_id', $ordersNumbers)->get();
 
-            return Resp::Success('ok', $data);
+            $invoice = \App\Models\Invoice::where('orderNumber', $validate->orderNumber)->get();
+
+            return Resp::Success('ok', $data->push(['payment_method' => $invoice[0]->payment_method]));
         } catch (\Throwable $th) {
             //throw $th;
             return Resp::Error('حدث خطأ ما', $th->getMessage());
