@@ -36,7 +36,7 @@ class StoreAddDescControllerResource extends Controller
     {
         $validate = (object) $request->validated();
 
-        if (!in_array($validate->product_id, $this->products())) {
+        if (!in_array($validate->product_id, (array) $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
@@ -105,7 +105,7 @@ class StoreAddDescControllerResource extends Controller
      */
     public function destroy(AdditionalDescription $storeAdditionalDescription)
     {
-        if (!in_array($storeAdditionalDescription->product_id, $this->products())) {
+        if (!in_array($storeAdditionalDescription->product_id, (array)$this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
         }
 
