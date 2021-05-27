@@ -7,7 +7,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 use Tymon\JWTAuth\Exceptions\InvalidClaimException;
 use Tymon\JWTAuth\Exceptions\PayloadException;
-
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
@@ -129,7 +129,16 @@ class Handler extends ExceptionHandler
         if (Response::HTTP_INTERNAL_SERVER_ERROR) {
 
             // $this->msg = new Resp();
-
+            if (Str::contains($exception->getMessage(), 'php_network_getaddresses')) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'error' => 'لا يوجد انترنت',
+                        'data' => null
+                    ],
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
             return response()->json(
                 [
                     'success' => false,
