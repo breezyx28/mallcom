@@ -12,7 +12,7 @@ class StoreAddDescControllerResource extends Controller
 {
     public function products()
     {
-        return \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id');
+        return \App\Models\StoreProduct::where('user_id', auth()->user()->id)->pluck('product_id')->all();
     }
     /**
      * Display a listing of the resource.
@@ -35,6 +35,7 @@ class StoreAddDescControllerResource extends Controller
     public function store(AdditionalDescriptionsRequest $request)
     {
         $validate = (object) $request->validated();
+        // return Resp::Error('حدث خطأ ما', (array) $this->products());
 
         if (!in_array($validate->product_id, (array) $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
