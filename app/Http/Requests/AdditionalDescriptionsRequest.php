@@ -26,7 +26,8 @@ class AdditionalDescriptionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'color' => 'string|max:191',
+            'color' => 'array',
+            'color.*' => 'string|max:191',
             'weight' => 'integer',
             'for' => 'string|max:191',
             'company' => 'string|max:191',
@@ -49,8 +50,9 @@ class AdditionalDescriptionsRequest extends FormRequest
     public function messages()
     {
         return [
-            'color.string' => 'حقل اللون يجب ان يكون من النوع نص',
-            'color.max' => 'حقل اللون تجاوز الحد المسموح للطول',
+            'color' => 'حقل اللون يجب ان يكون من النوع مصفوفة',
+            'color.*.string' => 'الألوان يجب ان تكون من النوع نص',
+            'color.*.max' => 'أحد الألوان تجاوز الحد المسموح للطول',
             'weight.integer' => 'حقل الوزن يجب ان يكون من النوع رقم صحيح',
             'for.string' => 'حقل التخصيص يجب ان يكون من النوع نص',
             'for.max' => 'حقل التخصيص تجاوز الحد المسموح للطول',

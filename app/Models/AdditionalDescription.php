@@ -9,6 +9,10 @@ class AdditionalDescription extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'color' => 'array',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
