@@ -33,6 +33,7 @@ use App\Http\Controllers\SizesController;
 use App\Http\Controllers\SizesControllerResource;
 use App\Http\Controllers\StateControllerResource;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\StoreAddDescController;
 use App\Http\Controllers\StoreAddDescControllerResource;
 use App\Http\Controllers\StoreControllerResource;
 use App\Http\Controllers\StoreProdPhotControllerResource;
@@ -161,6 +162,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
         // store additional description
         Route::apiResource('storeAdditionalDescription', StoreAddDescControllerResource::class);
+        Route::get('storeAdditionalDescriptionBy/{productID}', [StoreAddDescController::class, 'storeAdditionalDescriptionBy']);
 
         // store product Photo
         Route::apiResource('storeProductPhotos', StoreProdPhotControllerResource::class)->except('update');
