@@ -80,7 +80,7 @@ class StoreAddDescControllerResource extends Controller
      */
     public function update(UpdateAdditionalDescriptionRequest $request, AdditionalDescription $storeAdditionalDescription)
     {
-        $validate = $request->validated();
+        $validate = (object) $request->validated();
 
         if (!in_array($storeAdditionalDescription->product_id, (array) $this->products())) {
             return Resp::Error('لا تملك هذا المنتج', null);
